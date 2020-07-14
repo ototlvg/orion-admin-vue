@@ -1,0 +1,28 @@
+
+html{
+    overflow-y: unset !important;
+}
+
+button::-moz-focus-inner {
+    border: 0 !important;
+}
+
+select option {
+    color: white !important;
+  }
+  
+select option, select optgroup {
+  background-color: #363636 !important;
+}
+
+::placeholder {
+  color: #aaa !important;
+}
+
+*{
+  box-sizing: border-box !important;
+}
+
+
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
