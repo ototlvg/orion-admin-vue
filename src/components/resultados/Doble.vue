@@ -2,6 +2,7 @@
     <div class="doble">
         <p>Escala</p>
         <p>{{actual}}</p>
+        <p>{{dataEscala}}</p>
         <!-- <p>{{ $route.path }}</p> -->
         <!-- <p>{{ $route.fullPath }}</p> -->
         
@@ -15,6 +16,7 @@ export default {
         return {
             msg: 'Welcome to Your Vue.js App',
             actual: null,
+            dataEscala: null
         }
     },
     beforeCreate(){
@@ -24,9 +26,11 @@ export default {
     },
     methods: {
         getEscalaSuplementaria(survey){
+            let este= this
             this.$store.dispatch('getEscalaSuplementaria',survey)
             .then( data => {
                 console.log(data)
+                este.dataEscala= data
                 this.$store.commit('setSuplementaria', data)
             })
             .catch( data => {
@@ -34,9 +38,11 @@ export default {
             })
         },
         getEscalaContenido(survey){
+            let este= this
             this.$store.dispatch('getEscalaContenido',survey)
             .then( data => {
                 console.log(data)
+                este.dataEscala= data
                 this.$store.commit('setContenido', data)
             })
             .catch( data => {
@@ -54,6 +60,7 @@ export default {
                     this.getEscalaSuplementaria(1)
                 }else{
                     console.log('Suplementaria already in app')
+                    this.dataEscala=this.$store.getters.getSuplementaria
                 }
             }else{
                 this.$store.commit('setActualResults', { id: 3, name: "Contenido"})
@@ -63,6 +70,7 @@ export default {
                     this.getEscalaContenido(1)
                 }else{
                     console.log('Contenido already in app')
+                    this.dataEscala=this.$store.getters.getContenido
                 }
             }
         }

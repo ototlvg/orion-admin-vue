@@ -11,7 +11,7 @@ export const store = new Vuex.Store({
         actualView: null,
         inResults: false,
         patient: {"id":1,"code":"87060501","name":"Jason Othoniel","apaterno":"Lynch","amaterno":"Streich","gender":1,"marital_status":1,"birthday":"1977-09-25","job":1,"email":null,"type":1,"survey_available":1,"completed_surveys":0},
-        basica: null,
+        basica: [1,2,3],
         suplementaria: null,
         contenido: null,
         formData: {"prueba":null,"genders":[{"id":1,"gender":"Masculino"},{"id":2,"gender":"Femenino"}],"marital":[{"id":1,"status":"Soltero"},{"id":2,"status":"Casado"},{"id":3,"status":"Union libre"},{"id":4,"status":"Divorciado"},{"id":5,"status":"Separado"},{"id":6,"status":"Viudo"}],"jobs":[{"id":1,"name":"Estudiante"},{"id":2,"name":"Medico"},{"id":3,"name":"Ingeniero"}]},
@@ -205,6 +205,21 @@ export const store = new Vuex.Store({
                     .then(function () {
                         // always executed
                     }); 
+            })
+        },
+        reactivateSurvey(context, patient_id){
+            return new Promise((resolve, reject) => {
+                // console.log(page)
+                axios.post('/crud/reactivate', {
+                    patient_id: patient_id
+                  })
+                  .then(function (response) {
+                    console.log(response.data);
+                    // resolve(response.data)
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
             })
         }
 

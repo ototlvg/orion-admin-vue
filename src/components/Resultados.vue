@@ -1,5 +1,6 @@
 <template>
     <div class="resultados">
+
         <div class="resultados__fixed" :class="{ show: open }">
             <span class="material-icons resultados__fixed__arrow" @click="closeUserInfo">keyboard_tab</span>
             <div class="resultados__fixed__container">
@@ -75,6 +76,7 @@
         <div class="resultados__view">
             <router-view></router-view>
         </div>
+
     </div>
 </template>
 
@@ -148,6 +150,10 @@ export default {
         $route(to, from) {
             // this.$store.commit('unsetEscalas')
         }
+    },
+    beforeRouteLeave (to, from , next) {
+        this.$store.commit('setInResults',false)
+        next()
     }
 }
 </script>
@@ -157,11 +163,14 @@ export default {
 $medium: 768px;
 $large: 992px;
 .resultados{
-    background: blue;
+    // background: blue;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-content: flex-start;
+    width: 100%;
+    // overflow: auto; --ESTE
+    overflow: auto;
     &__fixed{
         &__arrow{
             position: absolute;
@@ -318,9 +327,13 @@ $large: 992px;
     }
 
     &__view{
+        width: 100%;
         flex: 1 1 auto;
-        background: skyblue;
-        display: flex;
+        // background: skyblue;
+        background: #f6f8fb;
+        // overflow: auto; ESTE
+        // overflow: auto;
+        // padding: 5em;
 
     }
 }

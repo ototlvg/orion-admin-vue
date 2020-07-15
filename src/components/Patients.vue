@@ -44,13 +44,13 @@
                             <div class="d-flex flex-column flex-md-row">
                                 <a class="btn btn-danger btn-sm mb-1 mb-md-0 mr-md-1 text-white" @click="deleteUser(patient.id)">Eliminar</a>
                                 <a class="btn btn-info btn-sm mb-1 mb-md-0 mr-md-1 text-white" @click="openDetailsModal(index)">Detalles</a>
-                                <a v-if="patient.survey_available==1" class="btn btn-success btn-sm mb-1 mb-md-0 text-white disabled" tabindex="-1">Reactivar</a>
-                                <a v-else class="btn btn-success btn-sm mb-1 mb-md-0 text-white" tabindex="-1" @click="reactivateSurvey">Reactivar</a>
+                                <a v-if="patient.survey_available==0" class="btn btn-success btn-sm mb-1 mb-md-0 text-white" tabindex="-1" @click="reactivateSurvey(patient.id)">Reactivar</a>
+                                <a v-else class="btn btn-success btn-sm mb-1 mb-md-0 text-white disabled" tabindex="-1">Reactivar</a>
                             </div>
                             
                         </td>
                         <td>
-                            <div class="btn-group" role="group" aria-label="Basic example">
+                            <div class="btn-group" role="group" aria-label="Basic example" v-if="patient.completed_surveys!=0">
                                 <!-- <router-link to="/resultados/basica" class="btn btn-secondary">Basico</router-link>
                                 <router-link to="/resultados/suplementaria" class="btn btn-secondary">Suplementaria</router-link>
                                 <router-link to="/resultados/contenido" class="btn btn-secondary">Contenido</router-link> -->
@@ -276,8 +276,8 @@ export default {
                 }
             })
         },
-        reactivateSurvey(){
-            console.log('Reactivando encuesta')
+        reactivateSurvey(id){
+            this.$store.dispatch('reactivateSurvey', id)
         },
         evaluatePage(type,specificPage){
             let page

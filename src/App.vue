@@ -85,14 +85,14 @@ $padding-headers: 1em;
 // $header-main-padding: 2em;
 $header-main-padding: 0;
 // $headerBranHeight: 60px;
-$headerBranHeight: 75px;
+$headerBrandHeight: 75px;
 .app {
     width: 100vw;
     height: 100vh;
     background: tomato;
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: $headerBranHeight 12fr;
+    grid-template-rows: $headerBrandHeight 12fr;
     grid-template-areas:
         "header"
         "main"
@@ -101,7 +101,7 @@ $headerBranHeight: 75px;
     @media (min-width: $large){
         // grid-template-columns: 75px 1fr;
         grid-template-columns: 67px 1fr;
-        grid-template-rows: 100vh;
+        grid-template-rows: 50vh 50vh;
         grid-template-areas:
             "aside main"
             "aside main"
@@ -148,7 +148,7 @@ $headerBranHeight: 75px;
 
         &__brand-container{
             width: 100%;
-            height: $headerBranHeight;
+            height: $headerBrandHeight;
             // background: red;
             display: flex;
             justify-content: center;
@@ -270,7 +270,6 @@ $headerBranHeight: 75px;
             justify-content: flex-start;
             display: none;
         }
-
     }
 
     &__main{
@@ -279,13 +278,15 @@ $headerBranHeight: 75px;
         // border-top: solid 1px rgba(0,0,0,0.1);
         display: flex; // <-------ESTO CONTROLA QUE EL router-view YA ESTA EN 100% POR DEFAULT
         padding: $header-main-padding;
-        overflow: auto;
+        // overflow: hidden;
         &__router-view{
             width: 100%;
             background: #f6f8fb;
+            // overflow: auto;
         }
         @media (min-width: $large){
-            // background: red !important;
+            background: red !important;
+            // width: auto;
         }
     }
     
