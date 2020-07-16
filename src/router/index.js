@@ -30,11 +30,11 @@ export default new Router({
                     component: Basica
                 },
                 {
-                    path: 'suplementaria',
+                    path: 'suplementaria/:survey',
                     component: Doble
                 },
                 {
-                    path: 'contenido',
+                    path: 'contenido/:survey',
                     component: Doble
                 }
             ]

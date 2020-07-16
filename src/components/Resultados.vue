@@ -137,9 +137,9 @@ export default {
             if(escala==1){
                 this.$router.push({ path: `/resultados/basica` })
             }else if(escala==2){
-                this.$router.push({ path: `/resultados/suplementaria` })
+                this.$router.push({ path: `/resultados/suplementaria/1` })
             }else if(escala==3){
-                this.$router.push({ path: `/resultados/contenido` })
+                this.$router.push({ path: `/resultados/contenido/1` })
             }
         },
         closeUserInfo(){

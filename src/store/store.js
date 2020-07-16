@@ -11,9 +11,9 @@ export const store = new Vuex.Store({
         actualView: null,
         inResults: false,
         patient: {"id":1,"code":"87060501","name":"Jason Othoniel","apaterno":"Lynch","amaterno":"Streich","gender":1,"marital_status":1,"birthday":"1977-09-25","job":1,"email":null,"type":1,"survey_available":1,"completed_surveys":0},
-        basica: [1,2,3],
-        suplementaria: null,
-        contenido: null,
+        basica: [],
+        suplementaria: [],
+        contenido: [],
         formData: {"prueba":null,"genders":[{"id":1,"gender":"Masculino"},{"id":2,"gender":"Femenino"}],"marital":[{"id":1,"status":"Soltero"},{"id":2,"status":"Casado"},{"id":3,"status":"Union libre"},{"id":4,"status":"Divorciado"},{"id":5,"status":"Separado"},{"id":6,"status":"Viudo"}],"jobs":[{"id":1,"name":"Estudiante"},{"id":2,"name":"Medico"},{"id":3,"name":"Ingeniero"}]},
         actualResults: {id:1, name: 'Basica'},
         openUserInfo: false
@@ -75,13 +75,16 @@ export const store = new Vuex.Store({
             state.patient= obj
         },
         setBasica(state, basica){
-            state.basica= basica
+            // state.basica= basica
+            state.basica.push(basica)
         },
         setSuplementaria(state, suplementaria){
-            state.suplementaria= suplementaria
+            // state.suplementaria= suplementaria
+            state.suplementaria.push(suplementaria)
         },
         setContenido(state, contenido){
-            state.contenido= contenido
+            // state.contenido= contenido
+            state.contenido.push(contenido)
         },
         setInResults(state,inResults){
             state.inResults= inResults
@@ -96,9 +99,9 @@ export const store = new Vuex.Store({
             state.openUserInfo= !state.openUserInfo
         },
         unsetEscalas(state){
-            state.basica= null
-            state.suplementaria= null
-            state.contenido= null
+            state.basica= []
+            state.suplementaria= []
+            state.contenido= []
         }
     },
     actions: {
@@ -171,30 +174,49 @@ export const store = new Vuex.Store({
                     }); 
             })
         },
-        getEscalaSuplementaria(context, survey) {
+        // getEscalaSuplementaria(context, survey) {
+        //     let id= context.getters.getPatient.id
+        //     // console.log(context.getters.getPatient.id)
+        //     return new Promise((resolve, reject) => {
+        //         // console.log(page)
+        //         axios.get(`/mmpi/suplementaria/${id}/${survey}`)
+        //             .then(function (response) {
+        //                 // console.log(response);
+        //                 resolve(response.data)
+        //             })
+        //             .catch(function (error) {
+        //                 console.log(error);
+        //             })
+        //             .then(function () {
+        //                 // always executed
+        //             }); 
+        //     })
+        // },
+        // getEscalaContenido(context, survey) {
+        //     let id= context.getters.getPatient.id
+        //     // console.log(context.getters.getPatient.id)
+        //     return new Promise((resolve, reject) => {
+        //         // console.log(page)
+        //         axios.get(`/mmpi/contenido/${id}/${survey}`)
+        //             .then(function (response) {
+        //                 // console.log(response);
+        //                 resolve(response.data)
+        //             })
+        //             .catch(function (error) {
+        //                 console.log(error);
+        //             })
+        //             .then(function () {
+        //                 // always executed
+        //             }); 
+        //     })
+        // },
+        getEscalaDoble(context, survey) {
             let id= context.getters.getPatient.id
-            // console.log(context.getters.getPatient.id)
+            // console.log(survey.name)
+            // console.log(survey.survey)
             return new Promise((resolve, reject) => {
                 // console.log(page)
-                axios.get(`/mmpi/suplementaria/${id}/${survey}`)
-                    .then(function (response) {
-                        // console.log(response);
-                        resolve(response.data)
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
-                    .then(function () {
-                        // always executed
-                    }); 
-            })
-        },
-        getEscalaContenido(context, survey) {
-            let id= context.getters.getPatient.id
-            // console.log(context.getters.getPatient.id)
-            return new Promise((resolve, reject) => {
-                // console.log(page)
-                axios.get(`/mmpi/contenido/${id}/${survey}`)
+                axios.get(`/mmpi/${survey.name}/${id}/${survey.survey}`)
                     .then(function (response) {
                         // console.log(response);
                         resolve(response.data)

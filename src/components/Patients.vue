@@ -371,7 +371,7 @@ export default {
             // this.patients // Este arreglo ya contiene toda la informacion necesario, solo mandalo
         },
         goToResultados(escala,patient_index){
-            let escalas= ['basica','suplementaria','contenido']
+            let escalas= ['basica','suplementaria/2','contenido/2']
             
             // console.log(this.patients[patient_index])
             this.$store.commit('setActualPatient', this.patients[patient_index])
