@@ -12,7 +12,7 @@ import { store } from './store/store'
 // Vue.use(Vuex)
 
 
-
+// const variablesSCSS= require('./assets/scss/_variables.scss');red
 
 window.$ = window.jQuery = require('jquery');
 import popperjs from 'popper.js';

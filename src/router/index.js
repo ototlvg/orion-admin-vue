@@ -26,7 +26,7 @@ export default new Router({
             component: Resultados,
             children: [
                 {
-                    path: 'basica',
+                    path: 'basica/:survey',
                     component: Basica
                 },
                 {

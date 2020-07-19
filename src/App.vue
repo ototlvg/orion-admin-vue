@@ -79,14 +79,16 @@ export default {
 </script>
 
 <style lang="scss">
-$medium: 768px;
-$large: 992px;
+// $medium: 768px;
+// $large: 992px;
+@import 'assets/scss/variables';
 $padding-headers: 1em;
 // $header-main-padding: 2em;
 $header-main-padding: 0;
 // $headerBranHeight: 60px;
 $headerBrandHeight: 75px;
 .app {
+    
     width: 100vw;
     height: 100vh;
     background: tomato;
@@ -163,7 +165,7 @@ $headerBrandHeight: 75px;
                 }
             }
             // background: rgb(51, 51, 51);
-            background: rgb(0, 132, 255);
+            background: $primary-color;
         }
         &__nav{
             width: 100%;
@@ -197,7 +199,7 @@ $headerBrandHeight: 75px;
                         }
                         &.router-link-exact-active.router-link-active{
                             // background: #f6f8fb;
-                            color: rgb(0, 132, 255);
+                            color: $primary-color;
                             // background: #3a42ac;
                             // color: white;
                             @media (min-width: $large){
@@ -236,7 +238,7 @@ $headerBrandHeight: 75px;
         // height: 60px;
         grid-area: header;
         // background: white;
-        background: rgb(0, 132, 255);
+        background: $primary-color;
         display: flex;
         align-items: center;
         // border: solid 10px black;
@@ -273,6 +275,7 @@ $headerBrandHeight: 75px;
     }
 
     &__main{
+        overflow: auto;
         grid-area: main;
         background: #f6f8fb;
         // border-top: solid 1px rgba(0,0,0,0.1);

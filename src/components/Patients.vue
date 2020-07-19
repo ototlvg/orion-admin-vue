@@ -56,9 +56,9 @@
                                 <router-link to="/resultados/contenido" class="btn btn-secondary">Contenido</router-link> -->
                                 
                                 
-                                <button type="button" class="btn btn-secondary" @click="goToResultados(0,index)">Basico</button>
-                                <button type="button" class="btn btn-secondary" @click="goToResultados(1,index)">Suplementaria</button>
-                                <button type="button" class="btn btn-secondary" @click="goToResultados(2,index)">Contenido</button>
+                                <button type="button" class="btn btn-secondary" @click="goToResultados(0,index,patient.completed_surveys)">Basico</button>
+                                <button type="button" class="btn btn-secondary" @click="goToResultados(1,index,patient.completed_surveys)">Suplementaria</button>
+                                <button type="button" class="btn btn-secondary" @click="goToResultados(2,index,patient.completed_surveys)">Contenido</button>
                             </div>
                         </td>
                     </tr>
@@ -225,6 +225,7 @@ export default {
         })
     },
     created(){
+        window.myChart= null
         this.$store.commit('setBasica', null)
         this.$store.commit('setSuplementaria', null)
         this.$store.commit('setContenido', null)
@@ -370,8 +371,9 @@ export default {
         saveForm(){
             // this.patients // Este arreglo ya contiene toda la informacion necesario, solo mandalo
         },
-        goToResultados(escala,patient_index){
-            let escalas= ['basica','suplementaria/2','contenido/2']
+        goToResultados(escala,patient_index,completedSurveys){
+            // let escalas= ['basica/1','suplementaria/2','contenido/2']
+            let escalas= [`basica/${completedSurveys}`,`suplementaria/${completedSurveys}`,`contenido/${completedSurveys}`]
             
             // console.log(this.patients[patient_index])
             this.$store.commit('setActualPatient', this.patients[patient_index])

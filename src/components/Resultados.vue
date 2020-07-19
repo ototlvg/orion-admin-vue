@@ -132,14 +132,15 @@ export default {
     methods: {
         goToResult(event){
             let escala= event.target.value
+            let completedSurveys= this.patient.completed_surveys
             // this.$router.push({ path: `/resultados/${escalas[escala]}` })
             // console.log(event.target.value)
             if(escala==1){
-                this.$router.push({ path: `/resultados/basica` })
+                this.$router.push({ path: `/resultados/basica/${completedSurveys}` })
             }else if(escala==2){
-                this.$router.push({ path: `/resultados/suplementaria/1` })
+                this.$router.push({ path: `/resultados/suplementaria/${completedSurveys}` })
             }else if(escala==3){
-                this.$router.push({ path: `/resultados/contenido/1` })
+                this.$router.push({ path: `/resultados/contenido/${completedSurveys}` })
             }
         },
         closeUserInfo(){
@@ -160,8 +161,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-$medium: 768px;
-$large: 992px;
+@import '../assets/scss/variables';
+// $medium: 768px;
+// $large: 992px;
 .resultados{
     // background: blue;
     display: flex;
@@ -169,8 +171,8 @@ $large: 992px;
     flex-wrap: nowrap;
     align-content: flex-start;
     width: 100%;
-    // overflow: auto; --ESTE
-    overflow: auto;
+    // overflow: auto; --ESTE DESACTIVADO
+    // overflow: auto; // -- ACTIVADO
     &__fixed{
         &__arrow{
             position: absolute;
@@ -195,6 +197,7 @@ $large: 992px;
         border-left: solid 1px rgba(0,0,0,0.1);
         max-width: 250px;
         transition: right 0.5s;
+        z-index: 100000000;
         @media (min-width: $large){
             max-width: 100%;
             // background: red;
@@ -329,14 +332,17 @@ $large: 992px;
     &__view{
         width: 100%;
         flex: 1 1 auto;
-        // background: skyblue;
         background: #f6f8fb;
-        // overflow: auto; ESTE
-        // overflow: auto;
+        // background: skyblue;
+        background: #f2f3f7;
+        // display: flex;
+
+        // overflow: auto; // ESTE
         // padding: 5em;
 
     }
 }
+
 
 
 </style>
