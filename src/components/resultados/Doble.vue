@@ -338,6 +338,7 @@ $gap: 1.5em;
                 }
 
                 &__chart-container{
+                    box-shadow: $box-shadow;
                     padding-bottom: 1.2em;
                     padding-top: 1.2em;
                     @media (min-width: $medium){
@@ -375,6 +376,8 @@ $gap: 1.5em;
                 display: flex;
             }
             &__card{
+                // border: 10px solid black;
+                box-shadow: $box-shadow;
                 width: 100%;
                 display: flex;
                 @media (min-width: $large){
@@ -430,5 +433,7 @@ $gap: 1.5em;
             }
         }
     }
+
+    
 }
 </style>

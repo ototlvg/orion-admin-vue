@@ -1,8 +1,8 @@
 <template>
     <div class="basica">
-        <!-- <p>Survey: {{dataEscala.puntuacionCrudaConK}} </p> -->
-        <!-- <p>{{dataEscala.puntuacionesCompletas}}</p> -->
-
+        <!-- <p>{{iValidez}}</p>
+        <p>{{iBasica}}</p> -->
+        <!-- <p>{{energia.basico}}</p> -->
         <div class="basica__header">
             <div class="basica__header__title-container">
                 <p class="basica__header__title-container__title">Resultados</p>
@@ -15,16 +15,10 @@
             </div>
         </div>
 
-
-        <!-- <p v-if=" dataEscala!=null ">{{dataEscala}}</p> -->
-
         <div class="basica__main">
 
             <div class="basica__main__section basica__main__section--chart">
                 <div class="basica__main__section--chart__extra-container">
-                    <!-- <div class="basica__main__section--chart__extra-container__card">
-                    
-                    </div> -->
                     <Card v-for="(K,index) in dataEscala.factorKAgregado" :key="index" :factorKAgregado="K" :puntuacionCrudaConK="dataEscala.puntuacionCrudaConK[index]" :escala="escalasK[index]"></Card>
                 </div>
                 <div class="basica__main__section--chart__chart-container">
@@ -57,6 +51,35 @@
             </div>
         </div>
 
+        <div class="basica__inter">
+            <div class="basica__inter__header">
+                <p>Interpretaciones</p>
+            </div>
+            <div class="basica__inter__main">
+                <div class="basica__inter__main__section basica__inter__main__section--validez">
+                    <div class="basica__inter__main__section__header">
+                        <p>Escalas de Validez</p>
+                    </div>
+                    <div class="basica__inter__main__section__body">
+                        
+                    </div>
+
+                </div>
+                <div class="basica__inter__main__section basica__inter__main__section--clinica">
+                    <div class="basica__inter__main__section__header">
+                        <p>Escalas Clinicas</p>
+                    </div>
+                    <div class="basica__inter__main__section__body basica__inter__main__section__body--clinica">
+                        <div class="basica__inter__main__section__body--clinica__card-container">
+                            <!-- <span>klasjdklasj</span> -->
+                            <!-- <CardInter></CardInter> -->
+                            <CardInter v-for="(inter,index) in iClinicas" :key="index" :inter="inter" :escala="escalasClinicas[index]"></CardInter>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -64,9 +87,10 @@
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Card from './components/Card'
+import CardInter from './components/CardInter'
 export default {
     name: 'Basica',
-    components: {Card},
+    components: {Card, CardInter},
     data () {
         return {
             msg: 'Welcome to Your Vue.js App',
@@ -93,6 +117,19 @@ export default {
         },
         numero(){
             return this.$route.params.survey
+        },
+        iValidez(){
+            return this.dataEscala.interpretaciones.validez
+        },
+        iClinicas(){
+            return this.dataEscala.interpretaciones.clinicas
+        },
+        escalasValidez(){
+
+        },
+        escalasClinicas(){
+            let x= JSON.parse(JSON.stringify(this.dataEscala.escalas));
+            return x.splice(3,11)
         }
     },
     beforeCreate(){
@@ -248,7 +285,7 @@ export default {
 @import '../../assets/scss/variables';
 // EL CONTROL DEL OVERFLOW DEL VIEW SE HACE DESDE "Resultados"
 $gap: 1.5em;
-
+$font-size: 1.3em;
 .basica{
     padding: $gap;
     // padding-top: $gap;
@@ -270,7 +307,7 @@ $gap: 1.5em;
             display: flex;
             align-items: center;
             &__title{
-                font-size: 1.3em;
+                font-size: $font-size;
                 margin: 0;
             }
         }
@@ -283,7 +320,7 @@ $gap: 1.5em;
     // background: white;
     &__main{
         // width: 100%;
-        // background: white;
+        // background: blue;
         margin-bottom: $gap;
         &__section{
 
@@ -307,6 +344,9 @@ $gap: 1.5em;
                 &__chart-container{
                     padding: 2em;
                     background: white;
+                    // box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+                    // box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+                    box-shadow: $box-shadow;
                 }
 
             }
@@ -317,6 +357,7 @@ $gap: 1.5em;
         width: 100%;
         // background: blue;
         // overflow: hidden;
+        margin-bottom: $gap;
         &__header{
             margin-bottom: $gap;
             &__title{
@@ -339,6 +380,7 @@ $gap: 1.5em;
             &__card{
                 width: 100%;
                 display: flex;
+                box-shadow: $box-shadow;
                 @media (min-width: $large){
                     flex-wrap: wrap;
                 }
@@ -391,6 +433,50 @@ $gap: 1.5em;
                 }
             }
         }
+    }
+
+    &__inter{
+        width: 100%;
+        // background-color: red;
+        &__header{
+            p{
+                font-size: $font-size;
+                margin: 0;
+            }
+            margin-bottom: $gap;
+        }
+
+        &__main{
+            width: 100%;
+            // background: green;
+            display: grid;
+            // grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 1em;
+            &__section{
+                // background-color: white;
+                &__header{
+                    p{
+                        margin: 0;
+                    }
+                    margin-bottom: $gap;
+                }
+
+                &__body{
+                    width: 100%;
+                    &--clinica{
+
+                        &__card-container{
+                            // background: red;
+                            display: grid;
+                            gap: $gap;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }  
+
     }
 }
 

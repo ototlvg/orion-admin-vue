@@ -10,7 +10,7 @@ export const store = new Vuex.Store({
         token: localStorage.getItem('access_token') || null,
         actualView: null,
         inResults: false,
-        patient: {"id":1,"code":"87060501","name":"Jason Othoniel","apaterno":"Lynch","amaterno":"Streich","gender":1,"marital_status":1,"birthday":"1977-09-25","job":1,"email":null,"type":1,"survey_available":1,"completed_surveys":0},
+        patient: {"id":1,"code":"87060501","name":"Jason","apaterno":"Torres","amaterno":"Luis","gender":1,"marital_status":1,"birthday":"1977-09-25","job":1,"email":null,"type":1,"survey_available":1,"completed_surveys":0},
         basica: [],
         suplementaria: [],
         contenido: [],

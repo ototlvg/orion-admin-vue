@@ -50,6 +50,7 @@ $gap: 0.5em;
 $medium: 768px;
 $large: 992px;
 .card{
+    box-shadow: $box-shadow;
     width: 100%;
     border: 0;
     // background: red;
