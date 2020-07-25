@@ -230,6 +230,7 @@ export default {
         this.$store.commit('setSuplementaria', null)
         this.$store.commit('setContenido', null)
         this.$store.commit('unsetEscalas')
+        // this.$store.commit('setActualResults', null)
     },
     computed: {
         searchBoxIsEmpty(){
@@ -375,15 +376,19 @@ export default {
             // let escalas= ['basica/1','suplementaria/2','contenido/2']
             let escalas= [`basica/${completedSurveys}`,`suplementaria/${completedSurveys}`,`contenido/${completedSurveys}`]
             
-            // console.log(this.patients[patient_index])
+            if(escala == 0){
+                this.$store.commit('setActualResults', { id: 1, name: "Basica"})
+            }else if(escala == 1){
+                this.$store.commit('setActualResults', { id: 2, name: 'Suplementaria' })
+            }else{
+                this.$store.commit('setActualResults', { id: 3, name: 'Contenido' })
+            }
+
             this.$store.commit('setActualPatient', this.patients[patient_index])
 
             this.$router.push({ path: `/resultados/${escalas[escala]}` })
 
 
-            // if(escala==1){
-            //     this.$router.push({ path: '/resultados/basica' })
-            // }
         }
     }
 }

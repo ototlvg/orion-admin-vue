@@ -91,6 +91,7 @@ export default {
     },
     created(){
         this.$store.commit('setInResults',true)
+        
     },
     computed: {
         patient(){
@@ -136,8 +137,10 @@ export default {
             // this.$router.push({ path: `/resultados/${escalas[escala]}` })
             // console.log(event.target.value)
             if(escala==1){
+                // this.$store.commit('setActualResults', { id: 1, name: "Basica"})
                 this.$router.push({ path: `/resultados/basica/${completedSurveys}` })
             }else if(escala==2){
+                // this.$store.commit('setActualResults', { id: 2, name: "Suplementaria"})
                 this.$router.push({ path: `/resultados/suplementaria/${completedSurveys}` })
             }else if(escala==3){
                 this.$router.push({ path: `/resultados/contenido/${completedSurveys}` })
