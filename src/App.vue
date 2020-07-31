@@ -8,15 +8,15 @@
             <nav class="app__aside__nav">
                 <ul class="app__aside__nav__ul" @click="openSidebar">
                     <li class="app__aside__nav__ul__li">
-                        <router-link class="app__aside__nav__ul__li__router-link" :to="{ name: 'HelloWorld' }">
+                        <router-link class="app__aside__nav__ul__li__router-link" :to="{ name: 'Patients', params: { page:1 } }">
                             <span class="material-icons app__aside__nav__ul__li__router-link__icon">supervisor_account</span>
-                            <p class="app__aside__nav__ul__li__router-link__p">Patients</p>
+                            <p class="app__aside__nav__ul__li__router-link__p">Orion</p>
                         </router-link>
                     </li>
                     <li class="app__aside__nav__ul__li">
-                        <router-link class="app__aside__nav__ul__li__router-link" :to="{ name: 'Patients' }">
+                        <router-link class="app__aside__nav__ul__li__router-link" :to="{ name: 'HelloWorld' }">
                             <span class="material-icons app__aside__nav__ul__li__router-link__icon">directions_bus</span>
-                            <p class="app__aside__nav__ul__li__router-link__p">Orion</p>
+                            <p class="app__aside__nav__ul__li__router-link__p">Patients</p>
                         </router-link>
                     </li>
                 </ul>
@@ -33,10 +33,6 @@
         </div>
         <main class="app__main">
             <router-view class="app__main__router-view"/>
-            <!-- <i class="material-icons face">face</i>
-            <span class="material-icons">accessibility</span>
-            <span class="material-icons">fingerprint</span>
-            <i class="material-icons">&#xE87C;</i> -->
         </main>
     </div>
 </template>
@@ -103,7 +99,7 @@ $headerBrandHeight: 75px;
     @media (min-width: $large){
         // grid-template-columns: 75px 1fr;
         grid-template-columns: 67px 1fr;
-        grid-template-rows: 50vh 50vh;
+        grid-template-rows: auto auto;
         grid-template-areas:
             "aside main"
             "aside main"
@@ -277,14 +273,16 @@ $headerBrandHeight: 75px;
     &__main{
         overflow: auto;
         grid-area: main;
-        background: #f6f8fb;
+        background: $background-color;
         // border-top: solid 1px rgba(0,0,0,0.1);
         display: flex; // <-------ESTO CONTROLA QUE EL router-view YA ESTA EN 100% POR DEFAULT
+        flex-direction: column;
         padding: $header-main-padding;
         // overflow: hidden;
         &__router-view{
             width: 100%;
-            background: #f6f8fb;
+            background: $background-color;
+            flex: 1 1 auto;
             // overflow: auto;
         }
         @media (min-width: $large){

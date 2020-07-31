@@ -335,7 +335,7 @@ export default {
     &__view{
         width: 100%;
         flex: 1 1 auto;
-        background: #f6f8fb;
+        background: $background-color;
         // background: skyblue;
         background: #f2f3f7;
         // display: flex;

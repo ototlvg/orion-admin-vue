@@ -1,71 +1,157 @@
 <template>
     <div class="patients">
-        <!-- <div class="container-fluid p-0 mb-4 bg-primary"> -->
-        <div class="container-fluid p-0 mb-4">
-            <div class="row">
-                <div class="col">
-                    <input @keyup="getDataFromSearch" type="text" class="form-control" id="" v-model="searchBox">
-                </div>
+
+        <!-- Patient Header -->
+        <div class="patients__header">
+            <div class="patients__header__title-container">
+                <h2>Pacientes</h2>
             </div>
+            <div class="patients__header__searchbox-container">
+                <input @keyup="getDataFromSearch" type="text" class="form-control" id="" v-model="searchBox" placeholder="Buscar">
+            </div>
+
         </div>
-        <div class="container-fluid p-0">
-            <table class="table table-bordered table-hover">
-                <thead class="mb-3">
+
+        <!-- Searchbox -->
+        <!-- <div class="patients__searchbox">
+            <input @keyup="getDataFromSearch" type="text" class="form-control" id="" v-model="searchBox">
+        </div> -->
+
+        <!-- Table Container -->
+        <div class="patients__table-container">
+            <!-- <table class="table table-borderless"> -->
+            <table class="table">
+                <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col" class="d-none d-md-table-cell">Codigo</th>
-                        <th scope="col" class="d-none d-md-table-cell">Nombre</th>
+                        <th scope="col">ID</th>
+                        <th scope="col" class="d-none d-lg-table-cell">Codigo</th>
+                        <th scope="col" class="d-none d-lg-table-cell">Nombre</th>
                         <th scope="col">Apellidos</th>
-                        <th scope="col">Disponible</th>
-                        <th scope="col">Detalles</th>
+                        <th scope="col" class="d-none d-md-table-cell">Estado</th>
+                        <th scope="col">Acciones</th>
                         <th scope="col">Resultados</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr v-for="(patient,index) in patients" :key="index">
-                        <th scope="row">{{index+1}}</th>
-                        <td class="d-none d-md-table-cell">{{patient.code}}</td>
-                        <td class="d-none d-md-table-cell">{{patient.name}}</td>
-                        <td>{{patient.apaterno}} {{patient.amaterno}}</td>
-                        <td>
-                            <div class="d-flex" v-if="patient.survey_available">
-                                <span class="material-icons text-success"> check_box </span>
-                                <p class="m-0 ml-1">Si</p>
+                <tbody class="tbody">
+                    <tr class="tbody__tr" v-for="(patient,index) in patients" :key="index">
+                        <td class="tbody__tr__td" scope="row">{{patient.id}}</th>
+                        <td class="tbody__tr__td d-none d-lg-table-cell">{{patient.code}}</td>
+                        <td class="tbody__tr__td d-none d-lg-table-cell">{{patient.name}}</td>
+                        <td class="tbody__tr__td">{{patient.apaterno}} {{patient.amaterno}}</td>
+                        <td class="tbody__tr__td tbody__tr__td--status status d-none d-md-table-cell">
+                            <!-- <div class="ignorar">
+                                <div class="d-flex" v-if="patient.survey_available">
+                                    <span class="material-icons text-success"> check_box </span>
+                                    <p class="m-0 ml-1">Si</p>
+                                </div>
+
+                                <div class="d-flex" v-else>
+                                    <span class="material-icons text-warning">cancel</span>
+                                    <p class="m-0 ml-1">No</p>
+                                </div>
+                            </div> -->
+                            <div class="tbody__tr__td--status__cell tbody__tr__td--status__cell--active" v-if="patient.survey_available">
+                                <p class="m-0 ml-1">ACTIVO</p>
                             </div>
 
-                            <div class="d-flex" v-else>
-                                <span class="material-icons text-warning">cancel</span>
-                                <p class="m-0 ml-1">No</p>
+                            <div class="tbody__tr__td--status__cell tbody__tr__td--status__cell--inactive" v-else>
+                                <p class="m-0 ml-1">INACTIVO</p>
                             </div>
                         </td>
-                        <td>
-                            <!-- <span @click="deleteUser(1)" class="material-icons cursor-pointer text-danger"> delete </span>
-                            <span class="material-icons cursor-pointer text-info"> edit </span> -->
-                            <div class="d-flex flex-column flex-md-row">
-                                <a class="btn btn-danger btn-sm mb-1 mb-md-0 mr-md-1 text-white" @click="deleteUser(patient.id)">Eliminar</a>
-                                <a class="btn btn-info btn-sm mb-1 mb-md-0 mr-md-1 text-white" @click="openDetailsModal(index)">Detalles</a>
-                                <a v-if="patient.survey_available==0" class="btn btn-success btn-sm mb-1 mb-md-0 text-white" tabindex="-1" @click="reactivateSurvey(patient.id)">Reactivar</a>
-                                <a v-else class="btn btn-success btn-sm mb-1 mb-md-0 text-white disabled" tabindex="-1">Reactivar</a>
+
+                        <td class="tbody__tr__td tbody__tr__td--detalles">
+                            <div class="tbody__tr__td--detalles__container d-flex flex-column flex-lg-row">
+                                <!-- <div class="ignorar"> -->
+                                    <!-- <a class="btn btn-danger btn-sm mb-1 mb-md-0 mr-md-1 text-white" @click="deleteUser(patient.id)">Eliminar</a>
+                                    <a class="btn btn-info btn-sm mb-1 mb-md-0 mr-md-1 text-white" @click="openDetailsModal(index)">Detalles</a>
+                                    <a v-if="patient.survey_available==0" class="btn btn-success btn-sm mb-1 mb-md-0 text-white" tabindex="-1" @click="reactivateSurvey(patient.id)">Reactivar</a>
+                                    <a v-else class="btn btn-success btn-sm mb-1 mb-md-0 text-white disabled" tabindex="-1">Reactivar</a> -->
+                                    <!-- <a class="btn btn-danger btn-sm mb-1 mb-md-0 mr-md-1 text-white">Eliminar</a> -->
+                                    <!-- <a class="btn btn-info btn-sm mb-1 mb-md-0 mr-md-1 text-white" @click="openDetailsModal(index)">Detalles</a> -->
+                                    <!-- <a v-if="patient.survey_available==0" class="btn btn-success btn-sm mb-1 mb-md-0 text-white" tabindex="-1" @click="reactivateSurvey(patient.id)">Reactivar</a>
+                                    <a v-else class="btn btn-success btn-sm mb-1 mb-md-0 text-white disabled" tabindex="-1">Reactivar</a> -->
+
+                                <!-- </div> -->
+                                <div class="tbody__tr__td--detalles__container__icon-container" @click="deleteUser(patient.id)">
+                                    <!-- <span class="material-icons" @click="deleteUser(patient.id)">delete_forever</span> -->
+                                    <span class="material-icons">delete</span>
+
+                                </div>
+                                <div class="tbody__tr__td--detalles__container__icon-container" @click="openDetailsModal(index)">
+                                    <span class="material-icons">info</span>
+
+                                </div>
+                                <div class="tbody__tr__td--detalles__container__icon-container" @click="reactivateSurvey(patient.id)" v-if="patient.survey_available==0">
+                                    <span class="material-icons" >cached</span>
+                                </div>
+                                <div v-else class="tbody__tr__td--detalles__container__icon-container disabled" @click="reactivateSurvey(patient.id)">
+                                    <span class="material-icons">cached</span>
+                                </div>
                             </div>
-                            
                         </td>
-                        <td>
-                            <div class="btn-group" role="group" aria-label="Basic example" v-if="patient.completed_surveys!=0">
-                                <!-- <router-link to="/resultados/basica" class="btn btn-secondary">Basico</router-link>
-                                <router-link to="/resultados/suplementaria" class="btn btn-secondary">Suplementaria</router-link>
-                                <router-link to="/resultados/contenido" class="btn btn-secondary">Contenido</router-link> -->
-                                
-                                
+                        <td class="tbody__tr__td tbody__tr__td--results">
+                            <!-- <div class="btn-group" role="group" aria-label="Basic example" v-if="patient.completed_surveys!=0">
                                 <button type="button" class="btn btn-secondary" @click="goToResultados(0,index,patient.completed_surveys)">Basico</button>
                                 <button type="button" class="btn btn-secondary" @click="goToResultados(1,index,patient.completed_surveys)">Suplementaria</button>
                                 <button type="button" class="btn btn-secondary" @click="goToResultados(2,index,patient.completed_surveys)">Contenido</button>
+                            </div> -->
+
+                            <div class="tbody__tr__td tbody__tr__td--results__container" v-if="patient.completed_surveys!=0">
+                                <div @click="goToResultados(0,index,patient.completed_surveys)" class="tbody__tr__td tbody__tr__td--results__container__button-container">
+                                    <span>B</span>
+                                </div>
+                                <div @click="goToResultados(1,index,patient.completed_surveys)" class="tbody__tr__td tbody__tr__td--results__container__button-container">
+                                    <span>S</span>
+                                </div>
+                                <div @click="goToResultados(2,index,patient.completed_surveys)" class="tbody__tr__td tbody__tr__td--results__container__button-container">
+                                    <span>C</span>
+                                </div>
+                            </div>
+                            <div v-else class="tbody__tr__td tbody__tr__td--results__container">
+                                <div class="tbody__tr__td tbody__tr__td--results__container__button-container disabled">
+                                    <p>B</p>
+                                </div>
+                                <div class="tbody__tr__td tbody__tr__td--results__container__button-container disabled">
+                                    <p>S</p>
+                                </div>
+                                <div class="tbody__tr__td tbody__tr__td--results__container__button-container disabled">
+                                    <p>C</p>
+                                </div>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
+
         </div>
 
+        <!-- Pagination Container -->
+        <div class="patients__pagination-container">
+            <ul class="pagination">
+
+                <li v-if="!(current_page==1)" class="page-item" @click="getPage('previous')" >
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                </li>
+                <li v-else class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                </li>
+
+
+                
+                <li v-for="index in last_page" :key="index" class="page-item" :class="{ active: current_page==index }" @click="getPage('specific',index)">
+                    <a class="page-link" href="#">{{index}}</a>
+                </li>
+
+
+
+                <li v-if="!(current_page==last_page)" class="page-item" @click="getPage('next')" ref="next">
+                    <a class="page-link" href="#">Siguiente</a>
+                </li>
+                <li v-else class="page-item disabled" ref="next">
+                    <a class="page-link" href="#">Siguiente</a>
+                </li>
+            </ul> 
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -148,34 +234,6 @@
                 </div>
             </div>
         </div>
-
-
-        <div class="container-fluid p-0 justify-content-center d-flex mt-4">
-            <ul class="pagination">
-
-                <li v-if="!(current_page==1)" class="page-item" @click="getPage('previous')" >
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
-                </li>
-                <li v-else class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
-                </li>
-
-
-                
-                <li v-for="index in last_page" :key="index" class="page-item" :class="{ active: current_page==index }" @click="getPage('specific',index)">
-                    <a class="page-link" href="#">{{index}}</a>
-                </li>
-
-
-
-                <li v-if="!(current_page==last_page)" class="page-item" @click="getPage('next')" ref="next">
-                    <a class="page-link" href="#">Siguiente</a>
-                </li>
-                <li v-else class="page-item disabled" ref="next">
-                    <a class="page-link" href="#">Siguiente</a>
-                </li>
-            </ul>   
-        </div>
     </div>
 </template>
 
@@ -201,36 +259,16 @@ export default {
     },
     beforeCreate(){
         this.$store.commit('setActualView', 'Pacientes')
-        this.$store.dispatch('getFirstPageOfPatients')
-        .then( data => {
-            // console.log(data)
-            this.patients= data.data
-            this.current_page= data.current_page
-            this.last_page= data.last_page
-            this.totalPatientsInScreen= data.total
-            // este.$store.commit('setDashboardData',data)
-        })
-        .catch( data => {
-            // console.log('error funcionando correctamente')
-        })
-
-        this.$store.dispatch('getFormData')
-        .then( data => {
-            // console.log(data)
-            // this.formData= data
-            this.$store.commit('setFormData',data)
-        })
-        .catch( data => {
-            // console.log('error funcionando correctamente')
-        })
+        
     },
     created(){
-        window.myChart= null
-        this.$store.commit('setBasica', null)
-        this.$store.commit('setSuplementaria', null)
-        this.$store.commit('setContenido', null)
+        // this.$store.commit('setBasica', null)
+        // this.$store.commit('setSuplementaria', null)
+        // this.$store.commit('setContenido', null)
+        // let page = this.$route.params.page
+        // console.log(page)
+        this.getPatients()
         this.$store.commit('unsetEscalas')
-        // this.$store.commit('setActualResults', null)
     },
     computed: {
         searchBoxIsEmpty(){
@@ -256,6 +294,32 @@ export default {
         }
     },
     methods:{
+        getPatients(){
+            let page = this.$route.params.page
+            this.$store.dispatch('getFirstPageOfPatients')
+            .then( data => {
+                // console.log(data)
+                this.patients= data.data
+                this.current_page= data.current_page
+                this.last_page= data.last_page
+                this.totalPatientsInScreen= data.total
+                // este.$store.commit('setDashboardData',data)
+            })
+            .catch( data => {
+                // console.log('error funcionando correctamente')
+            })
+
+            this.$store.dispatch('getFormData')
+            .then( data => {
+                // console.log(data)
+                // this.formData= data
+                this.$store.commit('setFormData',data)
+            })
+            .catch( data => {
+                // console.log('error funcionando correctamente')
+            })
+
+        },
         deleteUser(id){
             console.log(id)
             Swal.fire({
@@ -282,15 +346,26 @@ export default {
             this.$store.dispatch('reactivateSurvey', id)
         },
         evaluatePage(type,specificPage){
-            let page
+            // let page
+            // if(type=='next'){
+            //     page= this.current_page+1;
+            // }else if(type=='previous'){
+            //     page= this.current_page-1;
+            // }else{
+            //     page= specificPage
+            // }
+            // return page
+
+            let page = this.$route.params.page
+            let nextPage
             if(type=='next'){
-                page= this.current_page+1;
+                nextPage= page+1;
             }else if(type=='previous'){
-                page= this.current_page-1;
+                nextPage= page-1;
             }else{
-                page= specificPage
+                nextPage= specificPage
             }
-            return page
+            return nextPage
         },
         getPage(type, specificPage=1){
             let page
@@ -373,7 +448,6 @@ export default {
             // this.patients // Este arreglo ya contiene toda la informacion necesario, solo mandalo
         },
         goToResultados(escala,patient_index,completedSurveys){
-            // let escalas= ['basica/1','suplementaria/2','contenido/2']
             let escalas= [`basica/${completedSurveys}`,`suplementaria/${completedSurveys}`,`contenido/${completedSurveys}`]
             
             if(escala == 0){
@@ -388,14 +462,219 @@ export default {
 
             this.$router.push({ path: `/resultados/${escalas[escala]}` })
 
-
         }
     }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
+@import '../assets/scss/variables';
+.patients{
+    // padding: 4.5em;
+    display: flex;
+    flex-wrap: wrap;
+    // background: green;
+    // align-content: flex-start;
+
+    &__header{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: red;
+        padding: 2em;
+        &__title-container{
+            h2{
+                margin: 0;
+            }
+        }
+    }
+
+    &__searchbox{
+        width: 100%;
+    }
+
+    &__table-container{
+        // background-color: green;
+        width: 100%;
+    }
+
+    &__pagination-container{
+        width: 100%;
+        align-self: flex-end;
+    }
+}
+
+.tbody{
+    &__tr{
+
+        &__td{
+            // &:nth-child(odd){
+            //     // background: red;
+            // }
+            vertical-align: middle;
+            height: 50px;
+            // padding: 0;
+            &--status{
+                // display: flex;
+                &__cell{ // container de p
+                    // padding: 0.3em;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 75px;
+                    height: 30px;
+                    border-radius: 50px;
+                    // padding-left: 1em;
+                    // padding-right: 1em;
+                    p{
+                        // width: auto;
+                        width: 65px;
+                        text-align: center;
+                        margin-left: 0 !important;
+                        font-size: 11px;
+                        padding: 0;
+                        color: $background-color;
+                        
+                    }
+
+                    &--active{
+                        background: #27ae61;
+                        // border: 1px solid #27ae61;
+                        // color: #27ae61;
+                    }
+
+                    &--inactive{
+                        background: #e84c3d;
+                        // border: 1px solid #e84c3d;
+                        // color: #e84c3d;
+                    }
+                }
+            }
+            &--detalles{
+                // background: blue;
+                // padding: 0;
+                vertical-align: middle;
+                &__container{
+                    display: flex;
+                    // justify-content: space-between;
+                    // background: purple;
+                    &__icon-container{
+                        // padding: 0.2em;
+                        // background: purple;
+                        cursor: pointer;
+                        width: 100%;
+                        padding: 0.3em;
+                        margin-bottom: 12px;
+                        width: 100%;
+                        &:nth-child(1){
+                            background: #e84c3d;
+                            color: $background-color;
+                        }
+                        &:nth-child(2){
+                            background: #2c97df;
+                            // color: #2c97df;
+                        }
+                        &:nth-child(3){
+                            background: #27ae61;
+                            color:$background-color;
+                            margin-right: 0;
+                            border-right: 0;
+                            margin-bottom: 0;
+                            &.disabled{
+                                color: gray;
+                                cursor: default;
+                            }
+                        }
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: $background-color;
+                        border-right: 1px solid rgba(0, 0, 0, 0.15);
+                        &.disabled{
+                            color: gray;
+                            cursor: default;
+                        }
+                        
+
+                        &:nth-child(odd){
+                            // background: skyblue;
+                        }
+                        span{
+                            font-size: 1.5em;
+                        }
+                        
+                        @media (min-width: $large){
+                            padding: 0;
+                            width: 50px;
+                            height: 35px;
+                            &:nth-child(1){
+                                background: none;
+                                color: #e84c3d;
+                            }
+                            &:nth-child(2){
+                                background: none;
+                                color: #2c97df;
+                            }
+                            &:nth-child(3){
+                                background: none;
+                                color: #27ae61;
+                                margin-right: 0;
+                                border-right: 0;
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            &--results{ // td
+                vertical-align: top;
+                &__container{
+                    height: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    @media (min-width: $large){
+                        flex-wrap: nowrap;
+                        
+                    }
+                    &__button-container{
+                        background-color: $primary-color;
+                        text-align: center;
+                        padding: 0.3em;
+                        width: 100%;
+                        height: 2.1em;
+                        margin-bottom: 12px;
+                        color: $background-color;
+                        &:first-child{
+                            // background-color: blue;
+                        }
+
+                        &:nth-child(2){
+                            // background: green;
+                        }
+                        &:last-child{
+                            // background: purple;
+                            margin-bottom: 0;
+                        }
+
+                        &.disabled{
+                            background-color: gray;
+                            cursor: not-allowed;
+                        }
+
+                        @media (min-width: $large){
+                            margin-right: 1em;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}
+
 .cursor-pointer{
     cursor: pointer;
 }
