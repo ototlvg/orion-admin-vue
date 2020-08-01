@@ -8,6 +8,7 @@
             </div>
             <div class="patients__header__searchbox-container">
                 <input @keyup="getDataFromSearch" type="text" class="form-control" id="" v-model="searchBox" placeholder="Buscar">
+                <!-- <input type="text" class="form-control" id="" v-model="searchBox" placeholder="Buscar"> -->
             </div>
 
         </div>
@@ -129,26 +130,43 @@
         <div class="patients__pagination-container">
             <ul class="pagination">
 
-                <li v-if="!(current_page==1)" class="page-item" @click="getPage('previous')" >
+                <!-- <li v-if="!(current_page==1)" class="page-item" @click="getPage('previous')" >
                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
                 </li>
+
                 <li v-else class="page-item disabled">
                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
                 </li>
 
-
-                
                 <li v-for="index in last_page" :key="index" class="page-item" :class="{ active: current_page==index }" @click="getPage('specific',index)">
                     <a class="page-link" href="#">{{index}}</a>
                 </li>
 
-
-
                 <li v-if="!(current_page==last_page)" class="page-item" @click="getPage('next')" ref="next">
                     <a class="page-link" href="#">Siguiente</a>
                 </li>
+
                 <li v-else class="page-item disabled" ref="next">
                     <a class="page-link" href="#">Siguiente</a>
+                </li> -->
+
+                <li v-if="!(current_page==1)" class="page-item" @click="getPage('previous')" >
+                    <span class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</span>
+                </li>
+                <li v-else class="page-item disabled">
+                    <span class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</span>
+                </li>
+
+
+                <li v-for="index in last_page" :key="index" class="page-item" :class="{ active: current_page==index }" @click="getPage('specific',index)">
+                    <span class="page-link" href="#">{{index}}</span>
+                </li>
+
+                <li v-if="!(current_page==last_page)" class="page-item" @click="getPage('next')" ref="next">
+                    <span class="page-link" href="#">Siguiente</span>
+                </li>
+                <li v-else class="page-item disabled" ref="next">
+                    <span class="page-link" href="#">Siguiente</span>
                 </li>
             </ul> 
         </div>
@@ -247,14 +265,14 @@ export default {
             welcome: 'Bienvenido',
             searchBox: '',
             patients: '',
-            current_page: 1,
             last_page: 1,
             totalPatientsInScreen: 1,
             patient: null,
             // formData: {"prueba": null,"genders": [{"id": 1,"gender": "Masculino"},{"id": 2,"gender": "Femenino"}],"marital": [{"id": 1,"status": "Soltero"},{"id": 2,"status": "Casado"},{"id": 3,"status": "Union libre"},{"id": 4,"status": "Divorciado"},{"id": 5,"status": "Separado"},{"id": 6,"status": "Viudo"}],"jobs": [{"id": 1,"name": "Estudiante"},{"id": 2,"name": "Medico"},{"id": 3,"name": "Ingeniero"}]}
             // formData: null,
             showSaveButton: false,
-            prueba: null
+            prueba: null,
+            flag: true
         }
     },
     beforeCreate(){
@@ -267,7 +285,8 @@ export default {
         // this.$store.commit('setContenido', null)
         // let page = this.$route.params.page
         // console.log(page)
-        this.getPatients()
+        // this.getPatients()
+        this.getPageFromServer(`?page=${this.$route.params.page}`)
         this.$store.commit('unsetEscalas')
     },
     computed: {
@@ -291,33 +310,37 @@ export default {
             let id= this.patient.job
             let jobs= this.formData.jobs
             return jobs.find( (obj) => obj.id == id).name
+        },
+        current_page(){
+            return this.$route.params.page
         }
     },
     methods:{
         getPatients(){
-            let page = this.$route.params.page
-            this.$store.dispatch('getFirstPageOfPatients')
-            .then( data => {
-                // console.log(data)
-                this.patients= data.data
-                this.current_page= data.current_page
-                this.last_page= data.last_page
-                this.totalPatientsInScreen= data.total
-                // este.$store.commit('setDashboardData',data)
-            })
-            .catch( data => {
-                // console.log('error funcionando correctamente')
-            })
+            // let page = this.$route.params.page
+            // this.$store.dispatch('getFirstPageOfPatients')
+            // .then( data => {
+            //     // console.log(data)
+            //     this.patients= data.data
+            //     // this.current_page= data.current_page
+            //     this.last_page= data.last_page
+            //     this.totalPatientsInScreen= data.total
+            //     // este.$store.commit('setDashboardData',data)
+            // })
+            // .catch( data => {
+            //     // console.log('error funcionando correctamente')
+            // })
 
-            this.$store.dispatch('getFormData')
-            .then( data => {
-                // console.log(data)
-                // this.formData= data
-                this.$store.commit('setFormData',data)
-            })
-            .catch( data => {
-                // console.log('error funcionando correctamente')
-            })
+            // this.$store.dispatch('getFormData')
+            // .then( data => {
+            //     // console.log(data)
+            //     // this.formData= data
+            //     this.$store.commit('setFormData',data)
+            // })
+            // .catch( data => {
+            //     // console.log('error funcionando correctamente')
+            // })
+
 
         },
         deleteUser(id){
@@ -345,83 +368,125 @@ export default {
         reactivateSurvey(id){
             this.$store.dispatch('reactivateSurvey', id)
         },
-        evaluatePage(type,specificPage){
-            // let page
-            // if(type=='next'){
-            //     page= this.current_page+1;
-            // }else if(type=='previous'){
-            //     page= this.current_page-1;
-            // }else{
-            //     page= specificPage
-            // }
-            // return page
 
-            let page = this.$route.params.page
-            let nextPage
-            if(type=='next'){
-                nextPage= page+1;
-            }else if(type=='previous'){
-                nextPage= page-1;
-            }else{
-                nextPage= specificPage
-            }
-            return nextPage
-        },
-        getPage(type, specificPage=1){
-            let page
-            let link
-            page= this.evaluatePage(type, specificPage)
-            if(this.searchBoxIsEmpty){
-                link= `/crud?page=${page}`
-                // this.dispatchPatients(link)
-            }else{
-                // console.log('caja de busqueda')
-                link= `/crud/search?page=${page}&search=${this.searchBox}`
-                // this.getDataFromSearch(link)
-            }
-            // console.dir(this.$refs.next.classList.contains('disabled'))
-            // console.log(link)
-            this.$store.dispatch('getPage', link)
-                .then( data => {
-                    // console.log(data)
-                    this.patients= data.data
-                    this.current_page= data.current_page
-                    this.last_page= data.last_page
-                    this.totalPatientsInScreen= data.total
-                })
-                .catch( data => {
-                    // console.log('error funcionando correctamente')
-                })
+        // pushPage(type, page){
             
+        // },
+
+        evaluateNextPage(type,page){
+            page == undefined ? page = this.current_page : false
+            let link
+            if(type == 'previous'){
+                page--
+            }else if(type == 'next'){
+                page++
+            }
+            if(!this.searchBoxIsEmpty){
+                // Si hay cosas en el searchbox
+                link = `/search?page=${page}&search=${this.searchBox}`
+            }else{
+                // Si no hay nada en el searchbox
+                link = `?page=${page}`
+            }
+            // console.log(type)
+            // console.log(page)
+            // console.log(link)
+            return { page, link }
         },
+
+        getPage(type,page){
+            this.flag = false
+            let data = this.evaluateNextPage(type,page)
+            // console.log(data)
+            this.getPageFromServer(data.link)
+            this.$router.push({ path: `/pacientes/${data.page}` })
+
+
+
+            // this.$store.dispatch('getPage', link)
+            // .then( data => {
+            //     console.log(data)
+            // })
+        },
+        getPageFromServer(link){
+            let este = this
+            this.$store.dispatch('getPage',link)
+            .then( data => {
+                console.log(data)
+                este.patients= data.data
+                este.last_page= data.last_page
+                este.totalPatientsInScreen= data.total
+            })
+            .catch( data => {
+                // console.log('error funcionando correctamente')
+            })
+        },
+
         getDataFromSearch: _.debounce(function(){
             if(this.searchBoxIsEmpty){
-                this.$store.dispatch('getFirstPageOfPatients')
-                .then( data => {
-                    // console.log(data)
-                    this.patients= data.data
-                    this.current_page= data.current_page
-                    this.last_page= data.last_page
-                    this.totalPatientsInScreen= data.total
-                })
-                .catch( data => {
-                    // console.log('error funcionando correctamente')
-                })
+                // Aqui manda a pedir la primera pagina
+                this.getPageFromServer('?page=1')
             }else{
-                let link= `/crud/search?page=1&search=${this.searchBox}`
-                this.$store.dispatch('getPage', link)
-                    .then( data => {
-                        // console.log(data)
-                        this.patients= data.data
-                        this.current_page= data.current_page
-                        this.last_page= data.last_page
-                        this.totalPatientsInScreen= data.total
-                    })
-                    .catch( data => {
-                        // console.log('error funcionando correctamente')
-                    })
+                // Aqui manda a pedir la informacion perzonalida
+                this.flag = false
+                if(this.$route.params.page !=1){
+                    this.$router.push({ path: `/pacientes/1` })
+                }
+                let link= `/search?page=1&search=${this.searchBox}`
+                // console.log(link)
+                this.getPageFromServer(link)
+
             }
-        }, 100),
+        }, 200),
+
+        ignorar(){
+            // evaluatePage(type,specificPage){
+            //     let page
+            //     if(type=='next'){
+            //         page= this.current_page+1;
+            //     }else if(type=='previous'){
+            //         page= this.current_page-1;
+            //     }else{
+            //         page= specificPage
+            //     }
+            //     return page
+
+            //     // let page = this.$route.params.page
+            //     // let nextPage
+            //     // if(type=='next'){
+            //     //     nextPage= page+1;
+            //     // }else if(type=='previous'){
+            //     //     nextPage= page-1;
+            //     // }else{
+            //     //     nextPage= specificPage
+            //     // }
+            //     // return nextPage
+            // },
+            // getPage(type, specificPage=1){
+            //     let page
+            //     let link
+            //     page= this.evaluatePage(type, specificPage)
+            //     if(this.searchBoxIsEmpty){
+            //         link= `/crud?page=${page}`
+            //     }else{
+            //         link= `/crud/search?page=${page}&search=${this.searchBox}`
+            //     }
+            //     this.$store.dispatch('getPage', link)
+            //         .then( data => {
+            //             // console.log(data)
+            //             this.patients= data.data
+            //             this.current_page= data.current_page
+            //             this.last_page= data.last_page
+            //             this.totalPatientsInScreen= data.total
+            //         })
+            //         .catch( data => {
+            //             // console.log('error funcionando correctamente')
+            //         })
+                
+            // },
+
+        },
+
         openDetailsModal(index){
             // this.patient= this.patients[index]
             this.patient= JSON.parse(JSON.stringify(this.patients[index]));
@@ -463,6 +528,18 @@ export default {
             this.$router.push({ path: `/resultados/${escalas[escala]}` })
 
         }
+    },
+    watch: {
+        $route(to, from) {
+            if(this.flag){
+                console.log('Watcher activado')
+                let type = 'specific'
+                let page = this.$route.params.page
+                let data = this.evaluateNextPage(type,page)
+                this.getPageFromServer(data.link)
+            }
+            this.flag = true
+        },
     }
 }
 </script>

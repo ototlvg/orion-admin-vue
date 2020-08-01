@@ -139,6 +139,23 @@ export const store = new Vuex.Store({
                     });
             })
         },
+        getPage(context, link){
+            // console.log('Ejecutando')
+            return new Promise((resolve, reject) => {
+                // console.log(page)
+                axios.get(`/crud${link}`)
+                    .then(function (response) {
+                        // console.log(response);
+                        resolve(response.data)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                    .then(function () {
+                        // always executed
+                    });
+            })
+        },
         getFormData(context) {
             // let page= index+1
             return new Promise((resolve, reject) => {
