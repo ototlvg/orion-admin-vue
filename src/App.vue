@@ -8,13 +8,13 @@
             <nav class="app__aside__nav">
                 <ul class="app__aside__nav__ul" @click="openSidebar">
                     <li class="app__aside__nav__ul__li">
-                        <router-link class="app__aside__nav__ul__li__router-link" :to="{ name: 'Patients', params: { page:1 } }">
+                        <router-link class="app__aside__nav__ul__li__router-link" :class="{ active: actualView == 'Pacientes' }" :to="{ name: 'Patients', params: { page:1 } }">
                             <span class="material-icons app__aside__nav__ul__li__router-link__icon">supervisor_account</span>
                             <p class="app__aside__nav__ul__li__router-link__p">Orion</p>
                         </router-link>
                     </li>
                     <li class="app__aside__nav__ul__li">
-                        <router-link class="app__aside__nav__ul__li__router-link" :to="{ name: 'HelloWorld' }">
+                        <router-link class="app__aside__nav__ul__li__router-link" :class="{ active: actualView == 'Autobus' }" :to="{ name: 'HelloWorld' }">
                             <span class="material-icons app__aside__nav__ul__li__router-link__icon">directions_bus</span>
                             <p class="app__aside__nav__ul__li__router-link__p">Patients</p>
                         </router-link>
@@ -27,12 +27,15 @@
         </div>
         <div class="app__header">
             <span class="material-icons app__header__icon app__header__icon__hamburguer" @click="openSidebar">menu</span>
-            <h2 class="app__header__title">Pacientes</h2>
+            <h2 class="app__header__title">{{actualView}}</h2>
             <span v-if="inResults" class="material-icons app__header__icon app__header__icon__user" @click="toggleUserInfo">dashboard</span>
             <span v-else class="material-icons app__header__icon app__header__icon__user--oculto">dashboard</span>
         </div>
         <main class="app__main">
             <router-view class="app__main__router-view"/>
+            <!-- <div class="app__main__loading-container">
+
+            </div> -->
         </main>
     </div>
 </template>
@@ -55,6 +58,9 @@ export default {
         },
         inResults(){
             return this.$store.getters.getInResults
+        },
+        actualView(){
+            return this.$store.getters.getActualView
         }
         
     },
@@ -193,7 +199,8 @@ $headerBrandHeight: 75px;
                         &:hover{
                             color: rgba(59, 59, 59,0.5);
                         }
-                        &.router-link-exact-active.router-link-active{
+                        // &.router-link-exact-active.router-link-active{
+                        &.active{
                             // background: #f6f8fb;
                             color: $primary-color;
                             // background: #3a42ac;
@@ -271,6 +278,7 @@ $headerBrandHeight: 75px;
     }
 
     &__main{
+        position: relative;
         overflow: auto;
         grid-area: main;
         background: $background-color;
@@ -289,6 +297,13 @@ $headerBrandHeight: 75px;
             background: red !important;
             // width: auto;
         }
+        // &__loading-container{
+        //     width: 100%;
+        //     height: 100vh;
+        //     // grid-area: main;
+        //     background: red;
+        //     position: absolute;
+        // }
     }
     
 }

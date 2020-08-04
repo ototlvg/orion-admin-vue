@@ -79,6 +79,7 @@ export default {
         };
     },
     created() {
+        this.$store.commit('setActualView', 'Autobus')
         Chart.helpers.merge(Chart.defaults.global.plugins.datalabels, {
             // color: '#FE777B'
             align: 'top'

@@ -151,16 +151,16 @@ export default {
             let escalaDataArray= this.$store.getters.getBasica
             // console.log(escalaDataArray)
             if(escalaDataArray.length == 0){
-                // console.log('No hay nada en array, mandando a buscar')
+                console.log('No hay nada en array, mandando a buscar')
                 this.getNewEscala(survey)
             }else{
-                // console.log('Buscando')
+                console.log('Buscando')
                 const found= escalaDataArray.find(element => element.survey == survey);
                 if(found == undefined){
-                    // console.log('Aun no esta en la app, llamando informacion')
+                    console.log('Aun no esta en la app, llamando informacion')
                     this.getNewEscala(survey)
                 }else{
-                    // console.log('Encontrado')
+                    console.log('Encontrado')
                     this.dataEscala= found
                     // this.grafica()
                 }
@@ -186,7 +186,7 @@ export default {
                 })
         },
         grafica(){
-            console.log('Funcion de grafica activada')
+            // console.log('Funcion de grafica activada')
             let escalasData= this.dataEscala.escalas
             let escalas= []
             // console.log(escalas)

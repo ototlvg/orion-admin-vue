@@ -47,6 +47,9 @@ export const store = new Vuex.Store({
         },
         getContenido(state){
             return state.contenido
+        },
+        getActualView(state){
+            return state.actualView
         }
     },
     mutations: {
@@ -116,6 +119,7 @@ export const store = new Vuex.Store({
                     })
                     .catch(function (error) {
                         console.log(error);
+                        // reject(error)
                     })
                     .then(function () {
                         // always executed
@@ -133,6 +137,7 @@ export const store = new Vuex.Store({
                     })
                     .catch(function (error) {
                         console.log(error);
+                        // reject(error)
                     })
                     .then(function () {
                         // always executed
@@ -150,6 +155,7 @@ export const store = new Vuex.Store({
                     })
                     .catch(function (error) {
                         console.log(error);
+                        // reject(error)
                     })
                     .then(function () {
                         // always executed
@@ -167,6 +173,7 @@ export const store = new Vuex.Store({
                     })
                     .catch(function (error) {
                         console.log(error);
+                        // reject(error)
                     })
                     .then(function () {
                         // always executed
@@ -185,48 +192,13 @@ export const store = new Vuex.Store({
                     })
                     .catch(function (error) {
                         console.log(error);
+                        // reject(error)
                     })
                     .then(function () {
                         // always executed
                     }); 
             })
         },
-        // getEscalaSuplementaria(context, survey) {
-        //     let id= context.getters.getPatient.id
-        //     // console.log(context.getters.getPatient.id)
-        //     return new Promise((resolve, reject) => {
-        //         // console.log(page)
-        //         axios.get(`/mmpi/suplementaria/${id}/${survey}`)
-        //             .then(function (response) {
-        //                 // console.log(response);
-        //                 resolve(response.data)
-        //             })
-        //             .catch(function (error) {
-        //                 console.log(error);
-        //             })
-        //             .then(function () {
-        //                 // always executed
-        //             }); 
-        //     })
-        // },
-        // getEscalaContenido(context, survey) {
-        //     let id= context.getters.getPatient.id
-        //     // console.log(context.getters.getPatient.id)
-        //     return new Promise((resolve, reject) => {
-        //         // console.log(page)
-        //         axios.get(`/mmpi/contenido/${id}/${survey}`)
-        //             .then(function (response) {
-        //                 // console.log(response);
-        //                 resolve(response.data)
-        //             })
-        //             .catch(function (error) {
-        //                 console.log(error);
-        //             })
-        //             .then(function () {
-        //                 // always executed
-        //             }); 
-        //     })
-        // },
         getEscalaDoble(context, survey) {
             let id= context.getters.getPatient.id
             // console.log(survey.name)
@@ -240,21 +212,41 @@ export const store = new Vuex.Store({
                     })
                     .catch(function (error) {
                         console.log(error);
+                        // reject(error)
                     })
                     .then(function () {
                         // always executed
                     }); 
             })
         },
-        reactivateSurvey(context, patient_id){
+        reactivateSurvey(context, data){
+            console.log(data)
             return new Promise((resolve, reject) => {
-                // console.log(page)
                 axios.post('/crud/reactivate', {
-                    patient_id: patient_id
+                    id: data.id,
+                    type: data.type
                   })
                   .then(function (response) {
-                    console.log(response.data);
-                    // resolve(response.data)
+                    // console.log(response.data);
+                    resolve(response.data)
+                  })
+                  .catch(function (error) {
+                    // console.log(error);
+                    // reject(error)
+                    reject(error.response)
+                  });
+            })
+        },
+
+        teclado(context, name){
+            return new Promise((resolve, reject) => {
+                // console.log(page)
+                axios.post('/crud/teclado', {
+                    name: name
+                  })
+                  .then(function (response) {
+                    // console.log(response.data);
+                    resolve(response.data)
                   })
                   .catch(function (error) {
                     console.log(error);

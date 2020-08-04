@@ -103,17 +103,17 @@ export default {
             let obj= { name: escalaActual, survey: survey }
 
             if(escalaDataArray.length == 0){
-                // console.log('No hay nada en array, mandando a buscar')
+                console.log('No hay nada en array, mandando a buscar')
                 this.getNewEscala(obj, escalaCapitalized)
             }else{
-                // console.log('Buscando')
+                console.log('Buscando')
                 const found= escalaDataArray.find(element => element.survey == survey);
                 // console.log(found)
                 if(found == undefined){
-                    // console.log('Aun no esta en la app, llamando informacion')
+                    console.log('Aun no esta en la app, llamando informacion')
                     this.getNewEscala(obj, escalaCapitalized)
                 }else{
-                    // console.log('Encontrado')
+                    console.log('Encontrado')
                     this.dataEscalaActual= found
                 }
             }
