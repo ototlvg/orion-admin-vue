@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import VueProgressBar from 'vue-progressbar'
 import Vue from 'vue'
 import Vuex from 'vuex'
 // import App from './App'
@@ -13,6 +14,14 @@ import { store } from './store/store'
 
 
 // const variablesSCSS= require('./assets/scss/_variables.scss');red
+
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '50px',
+    thickness: '4px',
+  
+})
 
 window.$ = window.jQuery = require('jquery');
 import popperjs from 'popper.js';

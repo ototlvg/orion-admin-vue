@@ -1,5 +1,18 @@
 <template>
     <div class="patients">
+        <div v-if="loading" class="patients__loading-container">
+            <!-- <div class="patients__loading-container__container">
+                <div class="lds-ring big"><div></div><div></div><div></div><div></div></div>
+            </div> -->
+        </div>
+        
+        <!-- <div class="container">
+            <button @click="start">Buton 1</button>
+            <button @click="set">Buton 2</button>
+            <button @click="increase">Buton 3</button>
+            <button @click="decrease">Buton 4</button>
+            <button @click="finish">Buton 5</button>
+        </div> -->
 
         <!-- Patient Header -->
         <div class="patients__header">
@@ -229,7 +242,7 @@ export default {
         
     },
     created(){
-        this.getPageFromServer(`?page=${this.$route.params.page}`)
+        this.getPageFromServer(`?page=${this.$route.params.page}`, 'first')
         this.$store.commit('unsetEscalas')
     },
     computed: {
@@ -256,6 +269,9 @@ export default {
         },
         current_page(){
             return this.$route.params.page
+        },
+        loading(){
+            return this.$store.getters.getLoading
         }
     },
     methods:{
@@ -413,7 +429,7 @@ export default {
             this.flag = false
             let data = this.evaluateNextPage(type,page)
             // console.log(data)
-            this.getPageFromServer(data.link)
+            this.getPageFromServer(data.link, 'secondary')
             this.$router.push({ path: `/pacientes/${data.page}` })
 
 
@@ -423,8 +439,14 @@ export default {
             //     console.log(data)
             // })
         },
-        getPageFromServer(link){
+        getPageFromServer(link, load){
             let este = this
+            if(load == 'first'){
+                this.$store.commit('setLoading',true)
+            }else if(load == 'secondary'){
+                console.log('Secundario')
+                this.$Progress.start()
+            }
             this.$store.dispatch('getPage',link)
             .then( data => {
                 // console.log(data.data)
@@ -437,6 +459,13 @@ export default {
                 este.patients= data.data
                 este.last_page= data.last_page
                 este.totalPatientsInScreen= data.total
+
+                if(load == 'first'){
+                    este.$store.commit('setLoading',false)
+                }else if(load == 'secondary'){
+                    console.log('Secundario')
+                    este.$Progress.finish()
+                }
             })
             .catch( data => {
                 // console.log('error funcionando correctamente')
@@ -446,7 +475,7 @@ export default {
         getDataFromSearch: _.debounce(function(){
             if(this.searchBoxIsEmpty){
                 // Aqui manda a pedir la primera pagina
-                this.getPageFromServer('?page=1')
+                this.getPageFromServer('?page=1', 'secondary')
             }else{
                 // Aqui manda a pedir la informacion perzonalida
                 this.flag = false
@@ -561,7 +590,26 @@ export default {
             .catch( data => {
                 // console.log('error funcionando correctamente')
             })
-        }
+        },
+        start () {
+            // console.log(this.$Progress)
+            this.$Progress.start()
+        },
+        set (num) {
+            this.$Progress.set(num)
+        },
+        increase (num) {
+            this.$Progress.increase(num)
+        },
+        decrease (num) {
+            this.$Progress.decrease(num)
+        },
+        finish () {
+            this.$Progress.finish()
+        },
+        fail () {
+            this.$Progress.fail()
+        },
     },
     watch: {
         $route(to, from) {
@@ -583,6 +631,29 @@ export default {
 @import '../assets/scss/variables';
 $cell-padding: 2em;
 .patients{
+    position: relative;
+    &__loading-container{
+        position: absolute;
+        top:0px;
+        bottom: 0px;
+        right: 0px;
+        left:0px;
+        background: rgba(0, 0, 0, 0.205);
+        // filter: blur(50px);
+        z-index: 1000;
+        // display: flex;
+        // align-items: center;
+        // justify-content: center;
+        &__container{
+            width: 100%;
+            height: 100vh;
+            // background: red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
     display: flex;
     align-content: flex-start;
     flex-wrap: wrap;
@@ -888,6 +959,10 @@ $cell-padding: 2em;
   width: 80px;
   height: 80px;
   transform: scale(0.25);
+  &.big{
+      transform: scale(0.9);
+      
+  }
 }
 .lds-ring div {
   box-sizing: border-box;

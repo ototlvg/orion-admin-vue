@@ -16,7 +16,8 @@ export const store = new Vuex.Store({
         contenido: [],
         formData: {"prueba":null,"genders":[{"id":1,"gender":"Masculino"},{"id":2,"gender":"Femenino"}],"marital":[{"id":1,"status":"Soltero"},{"id":2,"status":"Casado"},{"id":3,"status":"Union libre"},{"id":4,"status":"Divorciado"},{"id":5,"status":"Separado"},{"id":6,"status":"Viudo"}],"jobs":[{"id":1,"name":"Estudiante"},{"id":2,"name":"Medico"},{"id":3,"name":"Ingeniero"}]},
         actualResults: {id:1, name: 'Basica'},
-        openUserInfo: false
+        openUserInfo: false,
+        loading: false
         
         // formData: null
     },
@@ -50,6 +51,9 @@ export const store = new Vuex.Store({
         },
         getActualView(state){
             return state.actualView
+        },
+        getLoading(state){
+            return state.loading
         }
     },
     mutations: {
@@ -105,6 +109,9 @@ export const store = new Vuex.Store({
             state.basica= []
             state.suplementaria= []
             state.contenido= []
+        },
+        setLoading(state, status){
+            state.loading = status
         }
     },
     actions: {

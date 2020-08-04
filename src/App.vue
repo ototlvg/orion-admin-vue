@@ -31,12 +31,14 @@
             <span v-if="inResults" class="material-icons app__header__icon app__header__icon__user" @click="toggleUserInfo">dashboard</span>
             <span v-else class="material-icons app__header__icon app__header__icon__user--oculto">dashboard</span>
         </div>
-        <main class="app__main">
+        <main class="app__main" style="position:relative">
             <router-view class="app__main__router-view"/>
-            <!-- <div class="app__main__loading-container">
 
-            </div> -->
+            <div v-if="loading" class="app__main__loading-container">
+                <div class="lds-ring big"><div></div><div></div><div></div><div></div></div>
+            </div>
         </main>
+        <vue-progress-bar></vue-progress-bar>
     </div>
 </template>
 
@@ -61,6 +63,9 @@ export default {
         },
         actualView(){
             return this.$store.getters.getActualView
+        },
+        loading(){
+            return this.$store.getters.getLoading
         }
         
     },
@@ -278,7 +283,7 @@ $headerBrandHeight: 75px;
     }
 
     &__main{
-        position: relative;
+        position: relative !important;
         overflow: auto;
         grid-area: main;
         background: $background-color;
@@ -286,6 +291,7 @@ $headerBrandHeight: 75px;
         display: flex; // <-------ESTO CONTROLA QUE EL router-view YA ESTA EN 100% POR DEFAULT
         flex-direction: column;
         padding: $header-main-padding;
+        // background: blue;
         // overflow: hidden;
         &__router-view{
             width: 100%;
@@ -294,16 +300,28 @@ $headerBrandHeight: 75px;
             // overflow: auto;
         }
         @media (min-width: $large){
-            background: red !important;
+            // background: red !important;
             // width: auto;
         }
-        // &__loading-container{
-        //     width: 100%;
-        //     height: 100vh;
-        //     // grid-area: main;
-        //     background: red;
-        //     position: absolute;
-        // }
+        position: relative;
+        &__loading-container{
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            // background: rgba(0, 0, 0, 0.205);
+            z-index: 5000;
+            // position: absolute !important;
+            // z-index: 10000000000000000000000;
+            // top:0;
+            // right: 0;
+            // left: 0;
+            // bottom: 0;
+            // background: red;
+
+        }
     }
     
 }
@@ -311,5 +329,46 @@ $headerBrandHeight: 75px;
 .face{
     color: red;
     font-size: 30em;
+}
+
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  transform: scale(0.25);
+  &.big{
+      transform: scale(0.9);
+      
+  }
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
