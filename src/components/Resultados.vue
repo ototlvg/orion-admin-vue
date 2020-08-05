@@ -1,5 +1,8 @@
 <template>
     <div class="resultados">
+        <!-- <div v-if="loading" class="resultados__loading-container"> -->
+        <div v-if="loading" class="resultados__loading-container">
+        </div>
 
         <div class="resultados__fixed" :class="{ show: open }">
             <span class="material-icons resultados__fixed__arrow" @click="closeUserInfo">keyboard_tab</span>
@@ -91,7 +94,7 @@ export default {
     },
     created(){
         this.$store.commit('setInResults',true)
-        
+        // this.$store.commit('setLoading',true)
     },
     computed: {
         patient(){
@@ -128,6 +131,9 @@ export default {
         },
         open(){
             return this.$store.getters.getOpenUserInfo
+        },
+        loading(){
+            return this.$store.getters.getLoading
         }
     },
     methods: {
@@ -136,6 +142,7 @@ export default {
             let completedSurveys= this.patient.completed_surveys
             // this.$router.push({ path: `/resultados/${escalas[escala]}` })
             // console.log(event.target.value)
+            console.log('Pegaso')
             if(escala==1){
                 // this.$store.commit('setActualResults', { id: 1, name: "Basica"})
                 this.$router.push({ path: `/resultados/basica/${completedSurveys}` })
@@ -168,12 +175,23 @@ export default {
 // $medium: 768px;
 // $large: 992px;
 .resultados{
+    position: relative;
+    &__loading-container{
+        position: absolute;
+        top:0px;
+        bottom: 0px;
+        right: 0px;
+        left:0px;
+        background: rgba(0, 0, 0, 0.205);
+        z-index: 4000;
+    }
     // background: blue;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     align-content: flex-start;
     width: 100%;
+    // position: relative;
     // overflow: auto; --ESTE DESACTIVADO
     // overflow: auto; // -- ACTIVADO
     &__fixed{

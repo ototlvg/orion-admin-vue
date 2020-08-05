@@ -67,8 +67,18 @@
 
                         <td class="tbody__tr__td tbody__tr__td--detalles">
                             <div class="tbody__tr__td--detalles__container d-flex flex-column flex-lg-row">
-                                <div class="tbody__tr__td--detalles__container__icon-container" @click="deleteUser(patient.id)">
-                                    <span class="material-icons">delete</span>
+                                <div class="tbody__tr__td--detalles__container__icon-container" :class="{ loading: patient.loading.delete }" @click="deleteUser(patient.id)">
+                                    <span v-if="!patient.loading.delete" class="material-icons">delete</span>
+                                    <span v-else class="material-icons">hourglass_full</span>
+
+                                    <!-- <div class="tbody__tr__td--detalles__container__icon-container__loading-container">
+                                        <div class="lds-ring tbody__tr__td--detalles__container__icon-container__loading-container__icon-container icon-in">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                        </div>
+                                    </div> -->
 
                                 </div>
                                 <div class="tbody__tr__td--detalles__container__icon-container" @click="openDetailsModal(index)">
@@ -76,10 +86,10 @@
 
                                 </div>
 
-                                <div v-if="patient.survey_available==0" class="tbody__tr__td--detalles__container__icon-container d-md-none" @click="reactivateSurvey(patient.id)">
+                                <div v-if="patient.survey_available==0" class="tbody__tr__td--detalles__container__icon-container d-md-none" @click="reactivateSurvey('activate',patient.id)">
                                     <span class="material-icons" >cached</span>
                                 </div>
-                                <div v-else class="tbody__tr__td--detalles__container__icon-container disabled d-md-none" @click="reactivateSurvey(patient.id)">
+                                <div v-else class="tbody__tr__td--detalles__container__icon-container disabled d-md-none">
                                     <span class="material-icons">cached</span>
                                 </div>
 
@@ -302,8 +312,15 @@ export default {
 
 
         },
-        deleteUser(id){
-            console.log(id)
+        deleteUser(patientid){
+            // console.log(patientid)
+            let store = this.$store
+            let patients = this.patients
+            let found = patients.find( element => element.id == patientid )
+            if(found.loading.delete){
+                console.log('En proceso')
+                return false
+            }
             Swal.fire({
                 title: '¿Esta seguro?',
                 text: "Tanto el usuario como sus datos seran eliminados sin posibilidad de recuperarlos",
@@ -316,11 +333,52 @@ export default {
                 // Esto siempre se ejecuta
                 if (result.value) {
                     // Aqui envia la señal, si retorna true manda el mensaje
-                    Swal.fire(
-                        'Eliminado!',
-                        'El usuario junto a sus datos han sido eliminados',
-                        'success'
-                    )
+                    
+
+                    if(found != undefined){
+                        found.loading.delete = true
+                        // console.log(found)
+                    }
+
+                    store.dispatch('deletePatient', patientid)
+                    .then( data => {
+                        // console.log(found)
+
+                        let found = patient => patient.id == data.patientid
+                        const index = patients.findIndex(found)
+                        // console.log()
+
+                        console.log(patients.splice(index, 1))
+
+                        // let found = patients.find( element => element.id == data.patientid )
+                        // if(found){
+                        //     found.loading.delete = false
+                        // }
+
+                        // console.log(found)
+
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: `Paciente eliminado`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }) 
+
+                    })
+                    .catch( error => {
+                        
+                    })
+
+
+
+                    // console.log(found)
+
+                    // Swal.fire(
+                    //     'Eliminado!',
+                    //     'El usuario junto a sus datos han sido eliminados',
+                    //     'success'
+                    // )
                 }
             })
         },
@@ -561,6 +619,7 @@ export default {
         },
         saveForm(){
             // this.patients // Este arreglo ya contiene toda la informacion necesario, solo mandalo
+            console.log(this.patient)
         },
         goToResultados(escala,patient_index,completedSurveys){
             let escalas= [`basica/${completedSurveys}`,`suplementaria/${completedSurveys}`,`contenido/${completedSurveys}`]
@@ -639,11 +698,7 @@ $cell-padding: 2em;
         right: 0px;
         left:0px;
         background: rgba(0, 0, 0, 0.205);
-        // filter: blur(50px);
         z-index: 1000;
-        // display: flex;
-        // align-items: center;
-        // justify-content: center;
         &__container{
             width: 100%;
             height: 100vh;
@@ -696,6 +751,7 @@ $cell-padding: 2em;
         padding: $padding-master;
         width: 100%;
         padding-bottom: 0;
+        
         @media (min-width: $medium){
             padding: 0 $padding-master-md;
         }
@@ -808,9 +864,9 @@ $cell-padding: 2em;
                 vertical-align: middle;
                 &__container{
                     display: flex;
+                    // background: red;
                     &__icon-container{
-                        // padding: 0.2em;
-                        // background: purple !important;
+                        position: relative;
                         cursor: pointer;
                         width: 100%;
                         padding: 0.5em;
@@ -820,6 +876,16 @@ $cell-padding: 2em;
                         &:nth-child(1){
                             background: #e84c3d;
                             color: $background-color;
+                            @media (min-width: $large){
+                                &.loading{
+                                    background: #e84c3d;
+                                    color: white;
+                                    &:hover{
+                                        cursor: not-allowed;
+                                        color: white;
+                                    }
+                                }
+                            }
                         }
                         &:nth-child(2){
                             background: #2c97df;
@@ -953,16 +1019,17 @@ $cell-padding: 2em;
     display: flex;
     justify-content: space-between
 }
-.lds-ring {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-  transform: scale(0.25);
-  &.big{
-      transform: scale(0.9);
-      
-  }
+.lds-ring{
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    transform: scale(0.25);
+    &.big{
+        transform: scale(0.9);
+    }
+    &.icon-in{
+
+    }
 }
 .lds-ring div {
   box-sizing: border-box;
@@ -974,7 +1041,7 @@ $cell-padding: 2em;
   border: 8px solid #fff;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #fff transparent transparent transparent;
+  border-color: red transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;

@@ -61,7 +61,7 @@
                         <p>Escalas de Validez</p>
                     </div>
                     <div class="basica__inter__main__section__body">
-                        
+                        {{iValidez}}
                     </div>
 
                 </div>
@@ -130,7 +130,10 @@ export default {
         escalasClinicas(){
             let x= JSON.parse(JSON.stringify(this.dataEscala.escalas));
             return x.splice(3,11)
-        }
+        },
+        // loading(){
+        //     return this.$store.getters.getLoading
+        // }
     },
     beforeCreate(){
         this.$store.commit('setActualResults', { id: 1, name: "Basica"})
@@ -144,6 +147,7 @@ export default {
     },
     created(){
         this.getEscala()
+        
     },
     methods: {
         getEscala(){
@@ -151,6 +155,7 @@ export default {
             let escalaDataArray= this.$store.getters.getBasica
             // console.log(escalaDataArray)
             if(escalaDataArray.length == 0){
+                this.$store.commit('setLoading',true)
                 console.log('No hay nada en array, mandando a buscar')
                 this.getNewEscala(survey)
             }else{
@@ -158,6 +163,7 @@ export default {
                 const found= escalaDataArray.find(element => element.survey == survey);
                 if(found == undefined){
                     console.log('Aun no esta en la app, llamando informacion')
+                    this.$store.commit('setLoading',true)
                     this.getNewEscala(survey)
                 }else{
                     console.log('Encontrado')
@@ -176,6 +182,7 @@ export default {
             let este= this
             this.$store.dispatch('getEscalaBasica',survey)
                 .then( data => {
+                    this.$store.commit('setLoading',false)
                     // console.log(data)
                     this.$store.commit('setBasica', data)
                     este.dataEscala= data
@@ -233,9 +240,18 @@ export default {
                             'rgba(75, 192, 192, 1)',
                             'rgba(153, 102, 255, 1)',
                             'rgba(255, 159, 64, 1)',
-                            'rgba(255, 99, 132, 1)'
+                            'rgba(255, 99, 132, 1)',
                         ],
-                        borderWidth: 4
+                        borderWidth: 3,
+                        lineColor: "#1ff502",
+                        // backgroundColor: "#1ff502",
+                        borderColor: "rgba(0, 132, 255,0.7)",
+                        // borderDash: [5, 5],
+                        // backgroundColor: "#1ff502",
+                        // pointBackgroundColor: "#1ff502",
+                        // pointBorderColor: "#1ff502",
+                        // pointHoverBackgroundColor: "#1ff502",
+                        // pointHoverBorderColor: "#1ff502"
                     }]
                 },
                 options: {

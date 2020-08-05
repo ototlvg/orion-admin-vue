@@ -256,7 +256,22 @@ export const store = new Vuex.Store({
                     resolve(response.data)
                   })
                   .catch(function (error) {
-                    console.log(error);
+                    reject(error.response)
+                  });
+            })
+        },
+
+        deletePatient(context, patientid){
+            // console.log('Delete user action ' + patientid)
+            return new Promise((resolve, reject) => {
+                // console.log(page)
+                axios.delete(`crud/${patientid}`)
+                  .then(function (response) {
+                    // console.log(response.data);
+                    resolve(response.data)
+                  })
+                  .catch(function (error) {
+                    reject(error.response)
                   });
             })
         }

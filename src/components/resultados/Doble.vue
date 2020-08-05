@@ -104,6 +104,7 @@ export default {
 
             if(escalaDataArray.length == 0){
                 console.log('No hay nada en array, mandando a buscar')
+                this.$store.commit('setLoading',true)
                 this.getNewEscala(obj, escalaCapitalized)
             }else{
                 console.log('Buscando')
@@ -111,6 +112,7 @@ export default {
                 // console.log(found)
                 if(found == undefined){
                     console.log('Aun no esta en la app, llamando informacion')
+                    this.$store.commit('setLoading',true)
                     this.getNewEscala(obj, escalaCapitalized)
                 }else{
                     console.log('Encontrado')
@@ -123,6 +125,7 @@ export default {
             this.$store.dispatch('getEscalaDoble',obj)
                 .then( data => {
                     // console.log(data)
+                    este.$store.commit('setLoading',false)
                     este.$store.commit(('set'+escala), data)
                     este.dataEscalaActual= data
                 })
@@ -188,7 +191,8 @@ export default {
                             'rgba(255, 159, 64, 1)',
                             'rgba(255, 99, 132, 1)'
                         ],
-                        borderWidth: 4
+                        borderWidth: 3,
+                        borderColor: "rgba(0, 132, 255,0.7)",
                     }]
                 },
                 options: {
