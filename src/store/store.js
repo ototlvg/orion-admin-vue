@@ -1,13 +1,49 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-
+import router from './../router/index';
 Vue.use(Vuex)
-axios.defaults.baseURL = 'http://orion.com/api/admin'
+axios.defaults.withCredentials = true
+axios.defaults.baseURL = 'http://localhost:4200/api/admin'
+// console.log(axios.defaults)
+
+// console.log(axios.defaults)
+
+// axios.interceptors.response.use(function (response) {
+//     // Do something with response data
+//     // console.log('hola1')
+//     // return response;
+// }, function (error) {
+//     // Do something with response error
+    
+//     if(error.response.status == 401){
+//         console.log(error.response.data.message)
+//         console.log('reedireccionar por falta de cookie o token expirado')
+//         router.push({ name: 'Login' })
+//     }
+// });
+
+axios.interceptors.response.use(function (response) {
+    // Do something with response data
+    return response;
+  }, function (error) {
+    // Do something with response error
+    // console.log(error.response);
+    if(error.response.status == 401){
+        console.log(error.response.data.message)
+        console.log('reedireccionar por falta de cookie o token expirado')
+        
+        if(router.currentRoute.name != 'Login'){
+            router.push({ name: 'Login' })
+        }
+    }
+    return Promise.reject(error);
+  });
 
 export const store = new Vuex.Store({
     state: {
-        token: localStorage.getItem('access_token') || null,
+        // token: localStorage.getItem('access_token') || null,
+        token: false,
         actualView: null,
         inResults: false,
         patient: {"id":1,"code":"87060501","name":"Jason","apaterno":"Torres","amaterno":"Luis","gender":1,"marital_status":1,"birthday":"1977-09-25","job":1,"email":null,"type":1,"survey_available":1,"completed_surveys":0},
@@ -17,7 +53,7 @@ export const store = new Vuex.Store({
         formData: {"prueba":null,"genders":[{"id":1,"gender":"Masculino"},{"id":2,"gender":"Femenino"}],"marital":[{"id":1,"status":"Soltero"},{"id":2,"status":"Casado"},{"id":3,"status":"Union libre"},{"id":4,"status":"Divorciado"},{"id":5,"status":"Separado"},{"id":6,"status":"Viudo"}],"jobs":[{"id":1,"name":"Estudiante"},{"id":2,"name":"Medico"},{"id":3,"name":"Ingeniero"}]},
         actualResults: {id:1, name: 'Basica'},
         openUserInfo: false,
-        loading: false
+        loading: false,
         
         // formData: null
     },
@@ -54,6 +90,9 @@ export const store = new Vuex.Store({
         },
         getLoading(state){
             return state.loading
+        },
+        getToken(state){
+            return state.token
         }
     },
     mutations: {
@@ -112,62 +151,46 @@ export const store = new Vuex.Store({
         },
         setLoading(state, status){
             state.loading = status
+        },
+        setToken(state, status){
+            state.token = status
         }
     },
     actions: {
-        getFirstPageOfPatients(context) {
-            // let page= index+1
-            return new Promise((resolve, reject) => {
-                // console.log(page)
-                axios.get('/crud')
-                    .then(function (response) {
-                        // console.log(response);
-                        resolve(response.data)
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                        // reject(error)
-                    })
-                    .then(function () {
-                        // always executed
-                    });
-            })
-        },
+        
         getPage(context, link){
             // console.log('Ejecutando')
             return new Promise((resolve, reject) => {
                 // console.log(page)
-                axios.get(link)
-                    .then(function (response) {
-                        // console.log(response);
-                        resolve(response.data)
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                        // reject(error)
-                    })
-                    .then(function () {
-                        // always executed
-                    });
-            })
-        },
-        getPage(context, link){
-            // console.log('Ejecutando')
-            return new Promise((resolve, reject) => {
-                // console.log(page)
+                // axios.get(`/crud${link}`, { withCredentials: true,  headers: { crossDomain: true, 'Content-Type': 'application/json' } })
+                // axios.get(`/crud${link}`, {withCredentials: true, headers: {'Access-Control-Allow-Origin': 'local', 'Content-Type': 'application/json'}})
+                
+                // axios.get(`/crud${link}`, { withCredentials: true, crossDomain: true})
                 axios.get(`/crud${link}`)
                     .then(function (response) {
                         // console.log(response);
                         resolve(response.data)
                     })
                     .catch(function (error) {
-                        console.log(error);
+                        // console.log(error);
                         // reject(error)
                     })
                     .then(function () {
                         // always executed
                     });
+
+                // fetch(`http://orion.com/api/probe`, {
+                //     method: 'GET',
+                //     credentials: 'include'
+                //   })
+                //     .then((response) => response)
+                //     .then((json) => {
+                //       console.log(json);
+                //     }).catch((err) => {
+                //       console.log(err);
+                //   });
             })
+            
         },
         getFormData(context) {
             // let page= index+1
@@ -245,18 +268,17 @@ export const store = new Vuex.Store({
             })
         },
 
-        teclado(context, name){
+        teclado(context){
             return new Promise((resolve, reject) => {
                 // console.log(page)
-                axios.post('/crud/teclado', {
-                    name: name
-                  })
+                axios.post('/crud/teclado')
                   .then(function (response) {
                     // console.log(response.data);
                     resolve(response.data)
                   })
                   .catch(function (error) {
-                    reject(error.response)
+                    // reject(error.response)
+                    reject(error)
                   });
             })
         },
@@ -274,9 +296,67 @@ export const store = new Vuex.Store({
                     reject(error.response)
                   });
             })
+        },
+
+        saveForm(context, data){
+            // console.log(data)
+            return new Promise((resolve, reject) => {
+                // console.log(page)
+                axios.put(`/crud/${data.id}`, {
+                    data: data
+                })
+                .then(function (response) {
+                    // console.log(response);
+                // console.log(response.data);
+                resolve(response.data)
+                })
+                .catch(function (error) {
+                    reject(error.response)
+                });
+            })
+        },
+
+        login(context, data){
+            // console.log(data)
+            return new Promise((resolve, reject) => {
+                axios.post('/login', {
+                    email: data.email,
+                    password: data.password
+                  })
+                  .then(function (response) {
+                    // console.log(response.data);
+                    resolve(response.data)
+                  })
+                  .catch(function (error) {
+                    // console.log(error);
+                    reject(error)
+                    // reject(error.response)
+                  });
+            })
+        },
+
+        checkAuth(context) {
+            return new Promise((resolve, reject) => {
+                // console.log(page)
+                axios.get(`/checkauth`)
+                    .then(function (response) {
+                        // console.log(response.data);
+                        resolve(response.data)
+                    })
+                    .catch(function (error) {
+                        // console.log(error);
+                        // reject(error)
+                    })
+                    .then(function () {
+                        // always executed
+                    }); 
+            })
         }
 
 
 
     }
 })
+
+// store.commit('setToken', true)
+// Lo tiene App.vue y Login.vue

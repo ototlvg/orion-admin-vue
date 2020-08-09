@@ -7,18 +7,31 @@
             </div>
             <nav class="app__aside__nav">
                 <ul class="app__aside__nav__ul" @click="openSidebar">
-                    <li class="app__aside__nav__ul__li">
-                        <router-link class="app__aside__nav__ul__li__router-link" :class="{ active: actualView == 'Pacientes' }" :to="{ name: 'Patients', params: { page:1 } }">
-                            <span class="material-icons app__aside__nav__ul__li__router-link__icon">supervisor_account</span>
-                            <p class="app__aside__nav__ul__li__router-link__p">Orion</p>
-                        </router-link>
-                    </li>
-                    <li class="app__aside__nav__ul__li">
-                        <router-link class="app__aside__nav__ul__li__router-link" :class="{ active: actualView == 'Autobus' }" :to="{ name: 'HelloWorld' }">
-                            <span class="material-icons app__aside__nav__ul__li__router-link__icon">directions_bus</span>
-                            <p class="app__aside__nav__ul__li__router-link__p">Patients</p>
-                        </router-link>
-                    </li>
+                    <span class="app__aside__nav__ul__span">
+                        <li class="app__aside__nav__ul__span__li" v-if="token">
+                            <router-link class="app__aside__nav__ul__span__li__router-link" :class="{ active: actualView == 'Pacientes' }" :to="{ name: 'Patients', params: { page:1 } }">
+                                <span class="material-icons app__aside__nav__ul__span__li__router-link__icon">supervisor_account</span>
+                                <p class="app__aside__nav__ul__span__li__router-link__p">Pacientes</p>
+                            </router-link>
+                        </li>
+                        <li class="app__aside__nav__ul__span__li" v-if="!token">
+                            <router-link class="app__aside__nav__ul__span__li__router-link" :class="{ active: actualView == 'Login' }" :to="{ name: 'Login' }">
+                                <span class="material-icons app__aside__nav__ul__span__li__router-link__icon">face</span>
+                                <p class="app__aside__nav__ul__span__li__router-link__p">Login</p>
+                            </router-link>
+                        </li>
+
+                    </span>
+
+                    <span class="app__aside__nav__ul__span" v-if="token">
+                        <li class="app__aside__nav__ul__span__li app__aside__nav__ul__span__li--logout">
+                            <router-link class="app__aside__nav__ul__span__li__router-link app__aside__nav__ul__span__li app__aside__nav__ul__span__li--logout__router-link" :class="{ active: actualView == 'Logout' }" :to="{ name: 'Logout' }">
+                                <span class="material-icons app__aside__nav__ul__span__li__router-link__icon">highlight_off</span>
+                                <p class="app__aside__nav__ul__span__li__router-link__p">Salir</p>
+                            </router-link>
+                        </li>
+
+                    </span>
                 </ul>
             </nav>
         </aside>
@@ -47,7 +60,7 @@
 export default {
     name: "App",
     created(){
-        
+        this.checkAuth()
     },
     data(){
         return {
@@ -66,6 +79,9 @@ export default {
         },
         loading(){
             return this.$store.getters.getLoading
+        },
+        token(){
+            return this.$store.getters.getToken
         }
         
     },
@@ -80,6 +96,17 @@ export default {
         },
         toggleUserInfo(){
             this.$store.commit('setOpenUserInfo')
+        },
+        checkAuth(){
+            let store = this.$store
+            this.$store.dispatch('checkAuth')
+            .then( data => {
+                store.commit('setToken', true)
+                console.log(data)
+            })
+            .catch( data => {
+                console.log(data)
+            })
         }
     }
 };
@@ -142,6 +169,15 @@ $headerBrandHeight: 75px;
         // background: #5864ff;
         background: white;
         transition: left 0.3s;
+        
+        // Nuevo XL3
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        flex-direction: column;
+        // background: red;
+        //
+
         @media (min-width: $large){
             position: static;
             grid-area: aside;
@@ -158,12 +194,9 @@ $headerBrandHeight: 75px;
         &__brand-container{
             width: 100%;
             height: $headerBrandHeight;
-            // background: red;
             display: flex;
             justify-content: center;
             align-items: center;
-            // margin-bottom: 3em;
-            // padding: 2em;
             &__icon{
                 color: white;
                 font-size: 2em;
@@ -171,71 +204,100 @@ $headerBrandHeight: 75px;
 
                 }
             }
-            // background: rgb(51, 51, 51);
             background: $primary-color;
+            // Nuevo XL3
+            flex: 0 0 static;
         }
         &__nav{
             width: 100%;
+            // Nuevo XL3
+            flex: 1 1 auto;
+            // background: skyblue;
+            display: flex;
+            //
             &__ul{
+                // Nuevo XL3
+                // background: pink;
+                display: flex;
+                // align-items: space-between;
+                flex-wrap: wrap;
+                // flex-direction: column;
+                align-content: space-between;
+                //
                 width: 100%;
                 margin: 0;
                 padding: 0;
-                &__li{
+                &__span{
                     width: 100%;
-                    // background: pink;
-                    &__router-link{
+                    &__li{
                         width: 100%;
-                        display: flex;
-                        &:hover{
-                            text-decoration: none;
-                        }
-                        // justify-content: space-around;
-                        align-items: center;
-                        height: 3em;
-                        color: rgb(180, 180, 180);                        
-                        padding: 2.2em 2em;
-                        @media (min-width: $large){
-                            padding: 0;
-                            justify-content: center;
-                            transition: color 0.4s;
-                            height: 5em;
-                            // margin-top: 3em;
-                        }
-                        &:hover{
-                            color: rgba(59, 59, 59,0.5);
-                        }
-                        // &.router-link-exact-active.router-link-active{
-                        &.active{
-                            // background: #f6f8fb;
-                            color: $primary-color;
-                            // background: #3a42ac;
-                            // color: white;
-                            @media (min-width: $large){
-                                // border-left: solid #5864ff;
-
+                        &--logout{
+                            // Nuevo XL3
+                            align-self: flex-end;
+                            //
+                            // background: purple;
+                            &__router-link{
+                                &:hover{
+                                    color: red !important;
+                                }
                             }
+    
                         }
-                        &__icon{
-                            margin-right: 0.5em;
+                        &__router-link{
+                            width: 100%;
+                            display: flex;
+                            &:hover{
+                                text-decoration: none;
+                            }
+                            // justify-content: space-around;
+                            align-items: center;
+                            height: 3em;
+                            color: rgb(180, 180, 180);                        
+                            padding: 2.2em 2em;
                             @media (min-width: $large){
+                                padding: 0;
+                                justify-content: center;
+                                transition: color 0.4s;
+                                height: 5em;
+                                // margin-top: 3em;
+                            }
+                            &:hover{
+                                color: rgba(59, 59, 59,0.5);
+                            }
+                            // &.router-link-exact-active.router-link-active{
+                            &.active{
+                                // background: #f6f8fb;
+                                color: $primary-color;
+                                // background: #3a42ac;
+                                // color: white;
+                                @media (min-width: $large){
+                                    // border-left: solid #5864ff;
+    
+                                }
+                            }
+                            &__icon{
+                                margin-right: 0.5em;
+                                @media (min-width: $large){
+                                    margin: 0;
+                                }
+                            }
+                            &__p{
+                                // visibility: hidden;
+                                // opacity: 0;
+                                // width: 0;
+                                // margin: -50px;
                                 margin: 0;
+                                padding: 0;
+                                @media (min-width: $large){
+                                    width: 0;
+                                    // margin-left: -10px;
+                                    // display: none;
+                                    opacity: 0;
+                                    visibility: hidden;
+                                }
                             }
                         }
-                        &__p{
-                            // visibility: hidden;
-                            // opacity: 0;
-                            // width: 0;
-                            // margin: -50px;
-                            margin: 0;
-                            padding: 0;
-                            @media (min-width: $large){
-                                width: 0;
-                                // margin-left: -10px;
-                                // display: none;
-                                opacity: 0;
-                                visibility: hidden;
-                            }
-                        }
+    
                     }
 
                 }

@@ -1,5 +1,6 @@
 <template>
     <div class="patients">
+        <!-- <button @click="tecladoFunc">Error</button> -->
         <div v-if="loading" class="patients__loading-container">
             <!-- <div class="patients__loading-container__container">
                 <div class="lds-ring big"><div></div><div></div><div></div><div></div></div>
@@ -209,7 +210,13 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" v-show="showSaveButton" @click="saveForm">Guardar</button>
+                    <button type="button" class="btn btn-success button-modal" v-show="showSaveButton" @click="saveForm">
+                        <span v-if="!loadingModal">Guardar</span>
+                        <div v-else class="spinner-border"  style="width: 1.5em; height: 1.5em;" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <!-- <div class="lds-ring modal-v"><div></div><div></div><div></div><div></div></div> -->
+                    </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeModal">Cerrar</button>
                     <!-- <button type="button" class="btn btn-primary">Entendido</button> -->
                 </div>
@@ -237,6 +244,7 @@ export default {
             showSaveButton: false,
             prueba: null,
             flag: true,
+            loadingModal: false,
             teclado: [
                 {id: 1, name: 'Jason'},
                 {id: 2, name: 'Oto'},
@@ -254,6 +262,9 @@ export default {
     created(){
         this.getPageFromServer(`?page=${this.$route.params.page}`, 'first')
         this.$store.commit('unsetEscalas')
+    },
+    mounted(){
+        
     },
     computed: {
         searchBoxIsEmpty(){
@@ -507,7 +518,7 @@ export default {
             }
             this.$store.dispatch('getPage',link)
             .then( data => {
-                // console.log(data.data)
+                console.log(data)
 
                 data.data.forEach(element => {
                     // console.log(element)
@@ -598,7 +609,7 @@ export default {
         openDetailsModal(index){
             // this.patient= this.patients[index]
             this.patient= JSON.parse(JSON.stringify(this.patients[index]));
-            $('#exampleModalCenter').modal({})
+            $('#exampleModalCenter').modal({backdrop: 'static', keyboard: false})
         },
         editarButton(){
             this.showSaveButton= !this.showSaveButton
@@ -619,7 +630,44 @@ export default {
         },
         saveForm(){
             // this.patients // Este arreglo ya contiene toda la informacion necesario, solo mandalo
-            console.log(this.patient)
+            // console.log(this.patient)
+            if(this.loadingModal){
+                return false
+            }
+            let store = this.$store
+            let patients = this.patients
+            this.loadingModal = true
+            let este = this
+            store.dispatch('saveForm', this.patient)
+            .then( data => {
+                // $('#exampleModalCenter').modal({ keyboard: false })
+                este.loadingModal = false
+                $('#exampleModalCenter').modal('hide')
+                let found = patients.find( element => element.id == data.id )
+                // console.log(found)
+
+                if(found){
+                    let columns = ['name', 'apaterno', 'amaterno', 'gender', 'marital_status', 'birthday', 'job']
+                    // console.log(found['name'])
+                    columns.forEach( element => {
+                        found[element] = data[element]
+                    })
+                }
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: `Paciente con ID ${data.id} modificado`,
+                    showConfirmButton: false,
+                    timer: 1500
+                }) 
+                
+                // console.log(data)
+                // console.log(anterior)
+            })
+            .catch( data => {
+                // console.log('error funcionando correctamente')
+            })
         },
         goToResultados(escala,patient_index,completedSurveys){
             let escalas= [`basica/${completedSurveys}`,`suplementaria/${completedSurveys}`,`contenido/${completedSurveys}`]
@@ -638,17 +686,17 @@ export default {
 
         },
 
-        tecladoFunc(name){
-            // console.log('klaskdklsaj')
-            let anterior = 'Nombre anterior: '+name;
-            this.$store.dispatch('teclado',name)
-            .then( data => {
-                // console.log(data)
-                console.log(anterior)
-            })
-            .catch( data => {
-                // console.log('error funcionando correctamente')
-            })
+        tecladoFunc(){
+            document.cookie = "username= ; path=/";
+
+            // this.$store.dispatch('teclado')
+            // .then( data => {
+            //     // console.log(data)
+            //     console.log(data)
+            // })
+            // .catch( data => {
+            //     console.log(data)
+            // })
         },
         start () {
             // console.log(this.$Progress)
@@ -1019,6 +1067,11 @@ $cell-padding: 2em;
     display: flex;
     justify-content: space-between
 }
+
+.button-modal{
+    display: flex;
+    justify-content: center;
+}
 .lds-ring{
     display: inline-block;
     width: 80px;
@@ -1030,6 +1083,11 @@ $cell-padding: 2em;
     &.icon-in{
 
     }
+
+.spinner-border{
+    width: 3rem !important;
+    height: 3rem !important;
+}
 }
 .lds-ring div {
   box-sizing: border-box;

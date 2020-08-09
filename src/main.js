@@ -23,6 +23,8 @@ Vue.use(VueProgressBar, {
   
 })
 
+
+
 window.$ = window.jQuery = require('jquery');
 import popperjs from 'popper.js';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Forma oficial
@@ -30,6 +32,40 @@ import 'bootstrap/dist/js/bootstrap.js'; // Forma oficial
 
 
 Vue.config.productionTip = false
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (store.getters.getToken == false) {
+        next({
+            name: 'Login',
+        })
+        } else {
+        next()
+        }
+    } 
+    
+    // else if (to.matched.some(record => record.meta.requiresData)) {
+    //     if (store.getters.getSections == null) {
+    //     next({
+    //         name: 'home',
+    //     })
+    //     } else {
+    //     next()
+    //     }
+    // }
+    else if (to.matched.some(record => record.meta.requiresVisitor)) {
+        if (store.getters.getToken == true) {
+        next({
+            name: 'Patients',
+        })
+        } else {
+        next()
+        }
+    } 
+    else {
+        next()
+    }
+})
 
 /* eslint-disable no-new */
 import iconos from './assets/iconfont/material-icons.css'
