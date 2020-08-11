@@ -15,12 +15,16 @@ export default new Router({
         {
           path: '/',
           name: 'HelloWorld',
-          component: HelloWorld
+          component: HelloWorld, 
+          redirect: '/login' 
         },
         {
             path: '/login',
             name: 'Login',
-            component: Login
+            component: Login,
+            meta: {
+                requiresVisitor: true,
+            },
         },
         {
             path: '/logout',
@@ -32,10 +36,22 @@ export default new Router({
             name: 'Patients',
             component: Patients
         },
+
+        {
+            path: '/pacientes',
+            name: 'Patientsn',
+            component: Patients,
+            redirect: '/pacientes/1' 
+        },
+
+
         {
             path: '/resultados',
             // name: 'resultados',
             component: Resultados,
+            meta: {
+                requiresData: true,
+            },
             children: [
                 {
                     path: 'basica/:survey',

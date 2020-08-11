@@ -4,6 +4,7 @@
         <aside class="app__aside" :class="{ open: sidebarOpen }">
             <div class="app__aside__brand-container">
                 <span class="material-icons app__aside__brand-container__icon">hdr_weak</span>
+                
             </div>
             <nav class="app__aside__nav">
                 <ul class="app__aside__nav__ul" @click="openSidebar">
@@ -30,7 +31,6 @@
                                 <p class="app__aside__nav__ul__span__li__router-link__p">Salir</p>
                             </router-link>
                         </li>
-
                     </span>
                 </ul>
             </nav>

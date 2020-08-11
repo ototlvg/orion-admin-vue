@@ -3,7 +3,7 @@
         <!-- <p>{{iValidez}}</p>
         <p>{{iBasica}}</p> -->
         <!-- <p>{{energia.basico}}</p> -->
-        <div class="basica__header">
+        <div class="basica__header" v-if="true">
             <div class="basica__header__title-container">
                 <p class="basica__header__title-container__title">Resultados</p>
             </div>
@@ -36,10 +36,8 @@
                 <p class="basica__punt__header__title">Puntuaciones T</p>
             </div>
             <div class="basica__punt__main">
-                <!-- <p>{{dataEscala.puntuacionesT}}</p> -->
                 <div class="basica__punt__main__card" v-for="(escala,index) in dataEscala.escalas" :key="index">
                     <div class="basica__punt__main__card__section basica__punt__main__card__section--title-container">
-                        <!-- <p>{{escala.escala}}</p> -->
                         <p class="basica__punt__main__card__section--title-container__p basica__punt__main__card__section--title-container__p--uno">{{escala.escala}}</p>
                         <p class="basica__punt__main__card__section--title-container__p basica__punt__main__card__section--title-container__p--dos">({{escala.nombre}})</p>
 
@@ -56,23 +54,23 @@
                 <p>Interpretaciones</p>
             </div>
             <div class="basica__inter__main">
+
                 <div class="basica__inter__main__section basica__inter__main__section--validez">
                     <div class="basica__inter__main__section__header">
                         <p>Escalas de Validez</p>
                     </div>
                     <div class="basica__inter__main__section__body">
-                        {{iValidez}}
+                        <CardVal v-for="(inter, index) in iValidez" :key="index" :inter="inter" :escala="escalasValidez[index]"></CardVal>
                     </div>
 
                 </div>
+
                 <div class="basica__inter__main__section basica__inter__main__section--clinica">
                     <div class="basica__inter__main__section__header">
                         <p>Escalas Clinicas</p>
                     </div>
                     <div class="basica__inter__main__section__body basica__inter__main__section__body--clinica">
                         <div class="basica__inter__main__section__body--clinica__card-container">
-                            <!-- <span>klasjdklasj</span> -->
-                            <!-- <CardInter></CardInter> -->
                             <CardInter v-for="(inter,index) in iClinicas" :key="index" :inter="inter" :escala="escalasClinicas[index]"></CardInter>
                         </div>
                     </div>
@@ -88,9 +86,10 @@ import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Card from './components/Card'
 import CardInter from './components/CardInter'
+import CardVal from './components/CardVal'
 export default {
     name: 'Basica',
-    components: {Card, CardInter},
+    components: {Card, CardInter, CardVal},
     data () {
         return {
             msg: 'Welcome to Your Vue.js App',
@@ -125,7 +124,8 @@ export default {
             return this.dataEscala.interpretaciones.clinicas
         },
         escalasValidez(){
-
+            let x= JSON.parse(JSON.stringify(this.dataEscala.escalas));
+            return x.splice(0,3)
         },
         escalasClinicas(){
             let x= JSON.parse(JSON.stringify(this.dataEscala.escalas));
@@ -143,6 +143,8 @@ export default {
             // color: '#FE777B'
             align: 'top'
         });
+
+        // El unico activado
         this.grafica()
     },
     created(){

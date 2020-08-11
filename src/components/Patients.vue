@@ -113,7 +113,7 @@
         </div>
 
         <!-- Pagination Container -->
-        <div class="patients__pagination-container">
+        <div class="patients__pagination-container" v-if="existsPatients">
             <ul class="pagination">
                 <li v-if="!(current_page==1)" class="page-item preNext-link preNext-link--active" @click="getPage('previous')" >
                     <span class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</span>
@@ -134,6 +134,9 @@
                     <span class="page-link" href="#">Siguiente</span>
                 </li>
             </ul> 
+        </div>
+        <div v-else class="patients__pagination-container">
+            <p>No existe ningun paciente</p>
         </div>
 
         <!-- Modal -->
@@ -293,6 +296,9 @@ export default {
         },
         loading(){
             return this.$store.getters.getLoading
+        },
+        existsPatients(){
+            return this.patients.length !=0
         }
     },
     methods:{

@@ -44,22 +44,26 @@ router.beforeEach((to, from, next) => {
         }
     } 
     
-    // else if (to.matched.some(record => record.meta.requiresData)) {
-    //     if (store.getters.getSections == null) {
-    //     next({
-    //         name: 'home',
-    //     })
-    //     } else {
-    //     next()
-    //     }
-    // }
-    else if (to.matched.some(record => record.meta.requiresVisitor)) {
-        if (store.getters.getToken == true) {
-        next({
-            name: 'Patients',
-        })
+    else if (to.matched.some(record => record.meta.requiresData)) {
+        if (store.getters.getPatient == null) {
+            next({
+                name: 'Patients',
+            })
         } else {
-        next()
+            next()
+        }
+    }
+    else if (to.matched.some(record => record.meta.requiresVisitor)) {
+        // console.log('getToken: ' + store.getters.getToken)
+
+        if (store.getters.getToken == true) {
+            // console.log('reedireccionar a Patients')
+            next({
+                name: 'Patients',
+            })
+        } else {
+            // console.log('Continuando a donde queremos')
+            next()
         }
     } 
     else {

@@ -1,17 +1,23 @@
 <template>
-    <div class="login">
+    <div class="login"> 
         <div class="login__container">
-            <div class="login__container__login-container">
-                <div class="login__container__login-container__section">
-                    <p>MMPI-2</p>
+            <div class="login__container__wrapper">
+                <div class="login__container__wrapper__section login__container__wrapper__section--title-section">
+                    <!-- <p>MMPI-2</p> -->
+                    <span class="material-icons login__container__wrapper__section--title-section__icon">hdr_weak</span>
                 </div>
-                <div class="login__container__login-container__section">
-                    <div class="form-group">
+
+                <div class="login__container__wrapper__section login__container__wrapper__section--error-section" v-if="error!=null">
+                    <p>{{error}}</p>
+                </div>
+
+                <div class="login__container__wrapper__section login__container__wrapper__section--data-section">
+                    <div class="form-group login__container__wrapper__section--data-section__input-wrapper">
                         <label for="exampleInputEmail1">Email</label>
                         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="email">
                         <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                     </div>
-                    <div class="form-group">
+                    <div class="form-group login__container__wrapper__section--data-section__input-wrapper">
                         <label for="exampleInputPassword1">Contraseña</label>
                         <input type="password" class="form-control" id="exampleInputPassword1" v-model="password">
                     </div>
@@ -37,6 +43,7 @@ export default {
     },
     created(){
         this.$store.commit('setLoading', false)
+        this.$store.commit('setToken', false)
         this.$Progress.finish()
     },
     data(){
@@ -44,7 +51,8 @@ export default {
             sidebarOpen: false,
             email: '',
             password: '',
-            loading: false
+            loading: false,
+            error: null,
         }
     },
     computed: {
@@ -73,7 +81,7 @@ export default {
 
             // this.loading = true
             // console.log('Valido')
-
+            this.error = null
             let store = this.$store
             let data = { email: this.email, password: this.password }
             let este = this
@@ -91,6 +99,7 @@ export default {
             .catch( data => {
                 console.log(data.response.data)
                 let message = data.response.data
+                este.error = message
             })
 
             
@@ -123,20 +132,54 @@ export default {
 // $medium: 768px;
 // $large: 992px;
 @import '../assets/scss/variables';
-
+// login__container__section
 .login{
-    // background: red;
     &__container{
+    // background: red;
         max-width: 1080px;
         margin: 0 auto;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        &__login-container{
+        &__wrapper{
             background: white;
             padding: 3em;
             justify-content: center;
+            box-shadow: $box-shadow;
+            max-width: 350px;
+            &__section{
+                &--error-section{
+                    color: rgb(245, 2, 2);
+                    text-align: center;
+                    width: 100%;
+                }
+                &--title-section{
+                    // background: red;
+                    color: rgba(0, 0, 0, 0.445);
+                    text-align: center;
+                    // font-size: 5em;
+                    &__icon{
+                        // color: rgba(0, 0, 0, 0.445);
+                        color: $primary-color;
+                        font-size: 5em;
+                    }
+                }
+                &--data-section{
+                    display: flex;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    &__input-wrapper{
+                        // background: red;
+                        width: 100%;
+                    }
+                }
+                button{
+                    // background-color: red !important;
+                    margin-top: 1em;
+                }
+            }
+
         }
     }
 }
