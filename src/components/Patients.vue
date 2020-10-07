@@ -524,7 +524,7 @@ export default {
             }
             this.$store.dispatch('getPage',link)
             .then( data => {
-                console.log(data)
+                // console.log(data) // TOKEN IMPRESION JWT IMPRIMIR
 
                 data.data.forEach(element => {
                     // console.log(element)

@@ -34,7 +34,8 @@ export default {
             console.log('eliminando')
             this.$store.commit('setToken', false)
             let date = new Date()
-            document.cookie = `jwt= ; expires=${date.toUTCString()}; path=/; samesite=none`
+            document.cookie = `jwt= ; expires=${date.toUTCString()}; path=/; samesite=Secure`
+            // document.cookie = `jwt= `
             this.$router.push({name:'Login'})
         }
     }

@@ -4,7 +4,13 @@ import axios from 'axios'
 import router from './../router/index';
 Vue.use(Vuex)
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'http://localhost:4200/api/admin'
+
+
+// axios.defaults.baseURL = 'http://localhost:4200/api/admin'
+axios.defaults.baseURL = 'http://mmpi.com/api/admin'
+
+
+
 // console.log(axios.defaults)
 
 // console.log(axios.defaults)
@@ -32,9 +38,12 @@ axios.interceptors.response.use(function (response) {
     if(error.response.status == 401){
         console.log(error.response.data.message)
         console.log('reedireccionar por falta de cookie o token expirado')
-        
+        console.log('coco')
         if(router.currentRoute.name != 'Login'){
-            router.push({ name: 'Login' })
+            // router.push({ path: '/login' })
+            console.log('TIENE QUE REEDIRECCIONAR ESTA DENTRO')
+            store.state.token= false // Este es necesario, porque creo que cuando intenta reedireccionar al login, este no lo deja entrar porque token esta en true, al esttar en true entra en conflicto con la regla de que no se puede entrar al login con token=true y arroja un error
+            router.push({ path: '/login' })
         }
     }
     return Promise.reject(error);
@@ -169,7 +178,7 @@ export const store = new Vuex.Store({
                 // axios.get(`/crud${link}`, { withCredentials: true, crossDomain: true})
                 axios.get(`/crud${link}`)
                     .then(function (response) {
-                        // console.log(response);
+                        console.log(response);
                         resolve(response.data)
                     })
                     .catch(function (error) {

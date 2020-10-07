@@ -1,3 +1,4 @@
+console.log('Version 2222')
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import VueProgressBar from 'vue-progressbar'
@@ -36,6 +37,7 @@ Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (store.getters.getToken == false) {
+            console.log('ksksks')
         next({
             name: 'Login',
         })
@@ -54,10 +56,11 @@ router.beforeEach((to, from, next) => {
         }
     }
     else if (to.matched.some(record => record.meta.requiresVisitor)) {
-        // console.log('getToken: ' + store.getters.getToken)
+        console.log('Mensaje desde main.js - getToken: ' + store.getters.getToken)
 
         if (store.getters.getToken == true) {
             // console.log('reedireccionar a Patients')
+            console.log('energia nuclear')
             next({
                 name: 'Patients',
             })

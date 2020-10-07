@@ -99,10 +99,16 @@ export default {
         },
         checkAuth(){
             let store = this.$store
+            let router = this.$router
             this.$store.dispatch('checkAuth')
             .then( data => {
+                // Manda una peticion al servidor, si retorna error significa que no existe el cookie en el front
                 store.commit('setToken', true)
-                console.log(data)
+                console.log('El servidor dice que el navegador envio el cookie jwt: ' + data)
+                if(data){
+                    console.log('Estar intentando entrar a login, pero como el servidor dice que tienes una cookie jwt valida, se reedireccionara a Patients')
+                    router.push( { name: 'Patients', params: { page:1 }} )
+                }
             })
             .catch( data => {
                 console.log(data)

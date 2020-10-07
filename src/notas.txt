@@ -1,0 +1,6 @@
+Recuerda que en desarrollo los componentes Login.vue y Logout.vue el document.cookie
+solo debe de tener el atributo del valor, sin fecha ni otros atributos
+document.cookie='jwt='+data --> Ejemplo de Login.vue
+document.cookie = `jwt= ` --> Ejemplo de Logout.vue
+
+Ya en prduccion se deben de cambiar a la instruccion completa

@@ -42,8 +42,14 @@ export default {
         
     },
     created(){
+        // console.log('VSCODE: ' +this.$store.getters.getToken)
         this.$store.commit('setLoading', false)
-        this.$store.commit('setToken', false)
+        if(!this.$store.getters.getToken){
+            this.$store.commit('setToken', false)
+
+        }
+
+
         this.$Progress.finish()
     },
     data(){
@@ -59,6 +65,11 @@ export default {
         isDisabled(){
             // return this.$store.getters.getDisabled
         },
+        getToken(){
+            console.log('Estamos en Login: ' + this.$store.getters.getToken)
+            // this.$router.push({ name: 'Patients' })
+            return this.$store.getters.getToken
+        }
         
     },
     methods: {
@@ -87,10 +98,16 @@ export default {
             let este = this
             store.dispatch('login', data)
             .then( data => {
+                console.log('Informacion retornada al presionar Login: ' + data)
                 let expDate = este.getExpDate(data)
-                // document.cookie = `jwt=${data}; expires=${expDate}; path=/; samesite=None;Secure`;
-                console.log(data)
-                document.cookie = `jwt=${data}; expires=${expDate}; path=/; samesite=none`;
+                document.cookie = `jwt=${data}; expires=${expDate}; path=/; samesite=Secure`;
+                
+                // document.cookie = `jwt=${data}; expires=${expDate}; path=/; samesite=none`;
+                // document.cookie='jwt='+data
+                
+                
+                // console.log('Imprimir cookie')
+                // console.log(document.cookie)
                 store.commit('setToken', true)
                 este.$router.push({ name: 'Patients', params: { page:1 } })
                 // document.cookie = `jwt=${data}; path=/; samesite=none`;
