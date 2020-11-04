@@ -6,8 +6,8 @@ Vue.use(Vuex)
 axios.defaults.withCredentials = true
 
 
-// axios.defaults.baseURL = 'http://localhost:4200/api/admin'
-axios.defaults.baseURL = 'http://mmpi.com/api/admin'
+axios.defaults.baseURL = 'http://localhost:4200/api/admin'
+// axios.defaults.baseURL = 'http://mmpi.com/api/admin'
 
 
 

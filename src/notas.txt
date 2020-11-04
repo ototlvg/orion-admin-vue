@@ -4,3 +4,11 @@ document.cookie='jwt='+data --> Ejemplo de Login.vue
 document.cookie = `jwt= ` --> Ejemplo de Logout.vue
 
 Ya en prduccion se deben de cambiar a la instruccion completa
+
+
+----------------------------------------
+
+Recuerda que para mandar cookies desde dominios diferentes, ademas de regresar los headers necesarios 
+(y tener en axios credentials:true) los dominios deben de ser gemelos, por ejemplo, si el servidor de
+desarrollo de vue es localhost:8080 la direccion de laravel a la que se enviaran las peticiones ajax deben 
+de ser algo como localhost:4200/api (no orion.com/api ni orion.com:4200/api) si no el cookie no se mandara.
