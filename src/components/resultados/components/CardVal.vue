@@ -1,8 +1,8 @@
 <template>
-    <div class="card-val">
+    <div class="card-val" v-if="checkIfInterIsObject">
         <!-- <p>Hola mundo</p> -->
         <!-- <div class="card-val__title-container" :class="alerta"> -->
-        <div class="card-val__title-container">
+        <div class="card-val__title-container" data-toggle="tooltip" :title="escala.nombre">
             <p>{{escala.escala}}</p>
             <!-- {{escala.escala}} -->
         </div>
@@ -15,7 +15,7 @@
                     <span class="material-icons card-val__body__section--main__title-container__logo" :class="alerta">title</span>
                     <p class="card-val__body__section--main__title-container__title">{{inter.nivel}}</p>
                 </div>
-                <div class="card-val__body__section--main__title-container" v-if="inter.utilidad!=null">
+                <div class="card-val__body__section--main__title-container" v-if="escala.escala != 'K'">
 
                     <!-- Quita el :class y descomenta la propiedad background-color de &__logo (Si se queda activado y :class esta activado el color igual se ve) -->
                     <span class="material-icons card-val__body__section--main__title-container__logo card-val__body__section--main__title-container__logo--utilidad">build</span>
@@ -49,10 +49,11 @@
 <script>
 export default {
     name: "CardVal",
-    props: {
-        inter: { type: Object },
-        escala: { type: Object}
-    },
+    // props: {
+    //     inter: { type: Object },
+    //     escala: { type: Object}
+    // },
+    props: ['inter', 'escala'],
     data() {
         return {
             // hola: 'Alto'
@@ -71,6 +72,11 @@ export default {
         },
         elevaciones(){
             return this.inter.elevacion.split('-')
+        },
+        checkIfInterIsObject(){
+            let to = (typeof this.inter)
+            
+            return to == 'object'
         }
     },
     created() {
@@ -185,6 +191,9 @@ $margin-master: 1em;
                     &__title{
                         margin: 0;
                         margin-left: 8px;
+                        font-size: 18px;
+                        // background: red;
+                        width: 14em;
                     }
                 }
 

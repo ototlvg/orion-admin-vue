@@ -37,7 +37,7 @@
             </div>
             <div class="basica__punt__main">
                 <div class="basica__punt__main__card" v-for="(escala,index) in dataEscala.escalas" :key="index">
-                    <div class="basica__punt__main__card__section basica__punt__main__card__section--title-container">
+                    <div class="basica__punt__main__card__section basica__punt__main__card__section--title-container" data-toggle="tooltip" :title="escala.nombre">
                         <p class="basica__punt__main__card__section--title-container__p basica__punt__main__card__section--title-container__p--uno">{{escala.escala}}</p>
                         <p class="basica__punt__main__card__section--title-container__p basica__punt__main__card__section--title-container__p--dos">({{escala.nombre}})</p>
 
@@ -45,6 +45,9 @@
                     <div class="basica__punt__main__card__section basica__punt__main__card__section--data">
                         <p>{{dataEscala.puntuacionesT[index]}}</p>
                     </div>
+                    <!-- <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                        Tooltip on top
+                    </button> -->
                 </div>
             </div>
         </div>

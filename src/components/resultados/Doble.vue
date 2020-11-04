@@ -40,7 +40,7 @@
                 <p class="doble__punt__header__title">Puntuaciones T</p>
             </div>
             <div class="doble__punt__main">
-                <div class="doble__punt__main__card" v-for="(escala,index) in escalasFiltrado" :key="index">
+                <div class="doble__punt__main__card" v-for="(escala,index) in escalasFiltrado" :key="index" data-toggle="tooltip" :title="escala.nombre">
                     <!-- <p>{{escala.escala}}</p> -->
                     <div class="doble__punt__main__card__section doble__punt__main__card__section--title-container">
                         <p class="doble__punt__main__card__section--title-container__p doble__punt__main__card__section--title-container__p--uno">{{escala.escala}}</p>

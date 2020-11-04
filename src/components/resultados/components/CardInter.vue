@@ -1,9 +1,9 @@
 <template>
     <div class="card-inter">
-        <div class="card-inter__title-container" :class="alerta">
+        <div class="card-inter__title-container" :class="alerta" v-if="checkIfInterIsObject" data-toggle="tooltip" :title="escala.nombre">
             <p>{{escala.escala}}</p>
         </div>
-        <div class="card-inter__body">
+        <div class="card-inter__body" v-if="checkIfInterIsObject">
             <!-- Nivel de puntuacion T -->
             <div class="card-inter__body__title-container">
                 <!-- Quita el :class y descomenta la propiedad background-color de &__logo (Si se queda activado y :class esta activado el color igual se ve) -->
@@ -20,10 +20,11 @@
 <script>
 export default {
     name: "CardInter",
-    props: {
-        inter: { type: Object },
-        escala: { type: Object}
-    },
+    // props: {
+    //     inter: { type: Object },
+    //     escala: { type: Object}
+    // },
+    props: ['inter', 'escala'],
     data() {
         return {
             // hola: 'Alto'
@@ -39,6 +40,11 @@ export default {
             }else{
                 return this.inter.nivel.nivel
             }
+        },
+        checkIfInterIsObject(){
+            let to = (typeof this.inter)
+            
+            return to == 'object'
         }
     },
     created() {
